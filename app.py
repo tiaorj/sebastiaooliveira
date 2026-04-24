@@ -6,10 +6,11 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     dados_curriculo = {
-        'nome': 'Sebastiao G. Oliveira',
-        'cargo': 'Desenvolvedor Full Stack',
+        'nome': 'Sebastião G. Oliveira',
+        'cargo': 'Analista de Sistemas Sr',
         'habilidades': ['Python', 'Flask', 'PostgreSQL', 'HTML5']
     }
     return render_template('index.html', info=dados_curriculo)
+
 if __name__ == '__main__':
     app.run(debug=True)
