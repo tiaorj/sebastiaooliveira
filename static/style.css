@@ -1,0 +1,10 @@
+/* Exemplo: Mudar a cor de fundo apenas do corpo do site */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Ajuste para as badges não ficarem coladas */
+.badge {
+    margin-right: 5px;
+    padding: 8px 12px;
+}

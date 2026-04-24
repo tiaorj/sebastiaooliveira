@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Minha Foto">
+            <h2 class="fw-bold">{{ info.nome }}</h2>
+            <p class="text-muted">{{ info.cargo }}</p>
+            <hr>
+            <div class="d-grid gap-2">
+                <a href="#" class="btn btn-primary">LinkedIn</a>
+                <a href="#" class="btn btn-dark">GitHub</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <section class="mb-4">
+                <h3 class="border-bottom pb-2">Sobre Mim</h3>
+                <p>Sou um desenvolvedor apaixonado por tecnologia e focado em soluções com Python e Flask.</p>
+            </section>
+
+            <section class="mb-4">
+                <h3 class="border-bottom pb-2">Experiência Profissional</h3>
+                <div class="mb-3">
+                    <h5>Desenvolvedor Júnior - Empresa XPTO</h5>
+                    <small class="text-secondary">Jan 2023 - Presente</small>
+                    <p>Atuação no desenvolvimento de APIs e manutenção de sistemas legados.</p>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="border-bottom pb-2">Habilidades</h3>
+                <span class="badge bg-secondary">Python</span>
+                <span class="badge bg-secondary">Flask</span>
+                <span class="badge bg-secondary">HTML5</span>
+                <span class="badge bg-secondary">Bootstrap</span>
+            </section>
+<h3>Minhas Habilidades:</h3>
+<ul>
+    {% for skill in info.habilidades %}
+        <li>{{ skill }}</li>
+    {% endfor %}
+</ul>            
+        </div>
+    </div>
+</div>
+{% endblock %}
