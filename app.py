@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     dados_curriculo = {
-        'nome': 'Sebastião G. Oliveira',
+        'nome': 'Sebastiao G. Oliveira',
         'cargo': 'Desenvolvedor Full Stack',
         'habilidades': ['Python', 'Flask', 'PostgreSQL', 'HTML5']
     }
