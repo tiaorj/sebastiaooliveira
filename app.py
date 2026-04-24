@@ -11,3 +11,5 @@ def home():
         'habilidades': ['Python', 'Flask', 'PostgreSQL', 'HTML5']
     }
     return render_template('index.html', info=dados_curriculo)
+if __name__ == '__main__':
+    app.run(debug=True)
