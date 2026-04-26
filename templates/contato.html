@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Contato{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2 class="fw-bold mb-4">Vamos Conversar?</h2>
+            <p class="text-muted mb-5">Sinta-se à vontade para entrar em contato para projetos, consultorias ou networking.</p>
+            
+            <div class="list-group shadow-sm">
+                <a href="https://wa.me/5541999113960" target="_blank" class="list-group-item list-group-item-action py-3 text-success">
+                    <i class="bi bi-whatsapp"></i> WhatsApp: (41) 99911-3960
+                </a>
+                <a href="mailto:{{ info.contato.email }}" class="list-group-item list-group-item-action py-3 text-primary">
+                    <i class="bi bi-envelope-at"></i> {{ info.contato.email }}
+                </a>
+                <a href="https://{{ info.contato.linkedin }}" target="_blank" class="list-group-item list-group-item-action py-3 text-dark">
+                    <i class="bi bi-linkedin"></i> LinkedIn Profissional
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
