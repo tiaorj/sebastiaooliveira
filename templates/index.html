@@ -6,11 +6,19 @@
         <h1 class="display-4 fw-bold text-primary">{{ info.nome }}</h1>
         <p class="lead text-secondary">{{ info.cargo }}</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <span class="badge bg-light text-dark border">📍 {{ info.contato.local }}</span>
-            <span class="badge bg-light text-dark border">
-                <a href="tel:+5541999113960" class="text-decoration-none"><i class="bi bi-telephone"></i> {{ info.contato.telefone }}</a></span>
-            <span class="badge bg-light text-dark border">✉️ {{ info.contato.email }}</span>
-            <span class="badge bg-light text-dark border">🔗 <a href="https://{{ info.contato.linkedin }}" target="_blank" class="text-decoration-none">LinkedIn</a></span>
+            <span class="text-secondary"><i class="bi bi-geo-alt-fill text-primary"></i> {{ info.contato.local }} </span>
+
+            
+            <a href="tel:+5541999113960" class="text-decoration-none"><i class="bi bi-telephone text-primary"></i> {{ info.contato.telefone }}</a>
+            
+            
+            <a href="mailto:tiaorj@gmail.com" class="text-decoration-none text-secondary">
+                <i class="bi bi-envelope-at-fill text-primary"></i> {{ info.contato.email }}                 
+            </a>
+
+            <a href="https://{{ info.contato.linkedin }}" target="_blank" class="text-decoration-none text-secondary">
+                <i class="bi bi-linkedin text-primary"></i> LinkedIn 
+            </a>            
         </div>
     </header>
 
@@ -55,7 +63,7 @@
             </div>
 
             <div class="modal fade" id="modal-{{ exp.id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down"></div>
+                <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
                     <div class="modal-content border-0 shadow-lg">
                         <div class="modal-header bg-dark text-white">
                             <h5 class="modal-title">{{ exp.empresa }}</h5>
