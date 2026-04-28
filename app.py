@@ -1,138 +1,47 @@
-# -*- coding: utf-8 -*-
-import pyodbc
-import platform
-from flask import Flask, render_template
+from flask import Flask
+from flask_mail import Mail
+from routes.empresa import empresa_bp
+from routes.curriculo import curriculo_bp
 
 app = Flask(__name__)
 
-# --- CONFIGURAÇÃO DE CONEXÃO ---
-if platform.system() != 'Windows':
-    DRIVER = '{ODBC Driver 17 for SQL Server}'
-else:
-    DRIVER = '{SQL Server}'
+app.secret_key = 'chave_secreta_super_protegida_da_directi'
 
-CONN_STR = (
-    f"Driver={DRIVER};"
-    "Server=DIRECTTI.mssql.somee.com;"
-    "Database=DIRECTTI;"
-    "UID=tiaorj_SQLLogin_1;"
-    "PWD=8z3h6dedem;"
-    "TrustServerCertificate=yes;"
-)
+# CONFIGURAÇÃO DE E-MAIL (Exemplo Gmail)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'direct.ti.tec@gmail.com'
+app.config['MAIL_PASSWORD'] = 'xbtx motn zyrk xibq' # Use senha de app, não a senha comum
+app.config['MAIL_DEFAULT_SENDER'] = 'direct.ti.tec@gmail.com'
+
+mail = Mail(app) # Inicializa o motor de e-mail
+
+# Injetar o objeto mail nas rotas se necessário, ou importar direto
+app.extensions['mail'] = mail
 
 # Informações base da DIRECTI / Sebastião
 INFO_BASE = {
     'nome': 'DIRECT TI SOLUÇÕES EM TECNOLOGIA LTDA',
     'especialista': 'SEBASTIÃO OLIVEIRA',
     'cargo': 'Analista de Sistemas Sênior & Arquiteto de Software',
+    'resumo':'Analista de Sistemas com sólida trajetória e mais de 20 anos de experiência em desenvolvimento Full-stack e arquitetura de sistemas de grande escala. Especialista na sustentação e modernização de ecossistemas legados (ASP Classic) e liderança técnica em projetos críticos. Expertise em performance SQL e Business Intelligence.',
     'contato': {
         'local': 'Rio de Janeiro – RJ',
         'telefone': '(41) 99911-3960',
-        'email': 'tiaorj@gmail.com',
+        'email': 'direct.ti.tec@gmail.com',
         'linkedin': 'linkedin.com/in/sebastião-oliveira-53346833'
     }
 }
 
-def get_db_connection():
-    try:
-        # Definimos um timeout curto para não travar o site se a Somee demorar
-        return pyodbc.connect(CONN_STR, timeout=10)
-    except Exception as e:
-        print(f"Erro de conexão: {e}")
-        return None
+# Injetar INFO_BASE automaticamente em todos os templates
+@app.context_processor
+def inject_info():
+    return dict(INFO_BASE=INFO_BASE)
 
-# --- ROTAS ---
+# Registro dos módulos (Blueprints)
+app.register_blueprint(empresa_bp)   # Cuida da Home (/)
+app.register_blueprint(curriculo_bp)  # Cuida do Sobre (/sobre)
 
-@app.route('/')
-def home():
-    """Página Inicial: Portfólio da Empresa DIRECTI"""
-    conn = get_db_connection()
-    cases = []
-    if conn:
-        cursor = conn.cursor()
-        # Busca os cases da nova tabela da empresa
-        try:
-            cursor.execute("SELECT servico, cliente, descricao_case, resultado FROM PortfoliioEmpresa")
-            for row in cursor.fetchall():
-                cases.append({
-                    'servico': row.servico,
-                    'cliente': row.cliente,
-                    'descricao': row.descricao_case,
-                    'resultado': row.resultado
-                })
-        except:
-            # Caso a tabela ainda não exista, enviamos uma lista vazia
-            pass
-        conn.close()
-    
-    return render_template('empresa.html', info=INFO_BASE, cases=cases)
-
-@app.route('/sobre')
-def sobre():
-    """Página Sobre o Especialista: Currículo Detalhado"""
-    conn = get_db_connection()
-    experiencias = []
-    habilidades = []
-    formacao = []
-    
-    if conn:
-        cursor = conn.cursor()
-        
-        # Buscar Experiências
-        cursor.execute("SELECT slug, empresa, periodo, cargo, resumo_curto, detalhes_pipe FROM Experiencias")
-        for row in cursor.fetchall():
-            experiencias.append({
-                'id': row.slug,
-                'empresa': row.empresa,
-                'periodo': row.periodo,
-                'cargo': row.cargo,
-                'resumo_curto': row.resumo_curto,
-                'detalhes': row.detalhes_pipe.split('|') if row.detalhes_pipe else []
-            })
-
-        # Buscar Habilidades
-        cursor.execute("SELECT categoria, itens FROM Habilidades")
-        for row in cursor.fetchall():
-            habilidades.append({'categoria': row.categoria, 'itens': row.itens})
-
-        # Buscar Formação
-        cursor.execute("SELECT descricao FROM Formacao")
-        for row in cursor.fetchall():
-            formacao.append(row.descricao)
-            
-        conn.close()
-
-    dados_completos = {
-        **INFO_BASE,
-        'resumo': "Analista Sênior com sólida trajetória em modernização de ecossistemas corporativos.",
-        'habilidades': habilidades,
-        'experiencias': experiencias,
-        'formacao': formacao
-    }
-    return render_template('index.html', info=dados_completos)
-
-@app.route('/projetos')
-def projetos():
-    """Página de Projetos Técnicos"""
-    conn = get_db_connection()
-    meus_projetos = []
-    if conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT titulo, tecnologias, descricao, icone FROM Projetos")
-        for row in cursor.fetchall():
-            meus_projetos.append({
-                'titulo': row.titulo,
-                'tecnologias': row.tecnologias,
-                'descricao': row.descricao,
-                'icone': row.icone
-            })
-        conn.close()
-    return render_template('projetos.html', info=INFO_BASE, projetos=meus_projetos)
-
-@app.route('/contato')
-def contato():
-    """Página de Contato"""
-    return render_template('contato.html', info=INFO_BASE)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

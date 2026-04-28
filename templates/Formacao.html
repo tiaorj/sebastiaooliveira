@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="content-scroll p-5">
+    <h2 class="display-4 fw-bold text-uppercase mb-5">Formação Acadêmica</h2>
+    {% for f in formacao %}
+    <div class="mb-5">
+        <h3 class="fw-bold text-uppercase text-primary-custom">{{ f.curso }}</h3>
+        <div class="h5 fw-bold text-secondary">{{ f.instituicao }}</div>
+        <span class="text-muted">{{ f.ano }}</span>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}

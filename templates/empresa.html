@@ -1,15 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}DIRECTI Solutions | Home{% endblock %}
 
+{% block title %}Projetos - {{ INFO_BASE.nome }}{% endblock %}
 {% block content %}
-<section id="home-directi" class="py-5 px-md-5 bg-white min-vh-100 d-flex flex-column justify-content-center">
-    <div class="text-center mb-5">
+<main>
+
+        <div class="text-center mb-5">
         <h1 class="display-2 fw-bold">
-            <span style="color: #003366;">{{ info.nome.split(' ')[0] }} </span><span style="color: #ff8c00;">{{ info.nome.split(' ')[1] }}</span> 
-            <small class="fs-4 text-muted d-block mt-2">{{ info.nome.split(' ')[2:] | join(' ') }}</small>
+            <span style="color: #003366;">{{ INFO_BASE.nome.split(' ')[0] }} </span><span style="color: #ff8c00;">{{ INFO_BASE.nome.split(' ')[1] }}</span> 
+            <small class="fs-4 text-muted d-block mt-2">{{ INFO_BASE.nome.split(' ')[2:] | join(' ') }}</small>
         </h1>
         
     </div>
+
+    <div class="text-center mt-5">
+        <p class="lead fs-4 opacity-75">Consultoria Especializada em Arquitetura de Software e Engenharia de Dados</p>
+        <a href="/sobre" class="btn btn-dark btn-lg px-5 rounded-pill">Ver Currículo Especialista</a>
+    </div>
+
+<div class="container py-5 mt-4">
+    <h2 class="display-6 fw-bold text-center text-uppercase mb-5" style="color: var(--resume-primary);">
+        Projetos em Destaque
+    </h2>
     
     <div class="row g-4">
         <div class="col-md-4 text-center">
@@ -34,9 +45,28 @@
             </div>
         </div>
     </div>
-    
-    <div class="text-center mt-5">
-        <a href="/sobre" class="btn btn-dark btn-lg px-5 rounded-pill">Conheça o Arquiteto de Software</a>
+
+<section class="bg-light py-5 mt-5">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-4">Pronto para modernizar o seu ecossistema?</h3>
+        <p class="text-muted mb-4">Especialista em ecossistemas críticos e modernização de ERPs.</p>
+        <a href="mailto:tiaorj@gmail.com" class="btn btn-primary-custom px-4">Entrar em Contato</a>
     </div>
 </section>
+
+<style>
+    .transition-hover:hover {
+        transform: translateY(-10px);
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .bg-primary-custom { background-color: var(--resume-primary) !important; }
+    .btn-primary-custom { 
+        background-color: var(--resume-primary); 
+        color: white;
+        border: none;
+    }
+    .btn-primary-custom:hover { background-color: var(--resume-accent); color: white; }
+</style>
+</main>
 {% endblock %}

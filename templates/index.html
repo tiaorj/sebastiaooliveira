@@ -1,68 +1,86 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<div class="resume-section">
+<div class="container-fluid p-0">
     
-    <section id="sobre" class="mb-5 border-bottom pb-5">
-        <h1 class="display-1 fw-bold text-uppercase mb-0">
-            {{ info.nome.split(' ')[0] }} 
-            <span class="text-primary-custom">{{ info.nome.split(' ')[1:] | join(' ') }}</span>
-        </h1>
-        <div class="fs-4 fw-semibold text-secondary mb-4">
-            {{ info.contato.local }} · {{ info.contato.telefone }} · 
-            <a href="mailto:{{ info.contato.email }}" class="text-primary-custom">{{ info.contato.email }}</a>
-        </div>
-        <p class="lead mb-4">{{ info.resumo }}</p>
-        <div class="social-icons">
-            <a class="btn btn-dark rounded-circle p-3" href="https://{{ info.contato.linkedin }}" target="_blank">
-                <i class="bi bi-linkedin fs-4"></i>
-            </a>
-        </div>
-    </section>
+    <main class="content-scroll">
+        <section id="sobre" class="resume-section">
+            <h1 class="display-1 fw-bold text-uppercase" style="line-height: 1;">
+                {{ INFO_BASE.especialista.split(' ')[0] }} 
+                <span class="text-primary-custom">{{ INFO_BASE.especialista.split(' ')[1] }}</span>
+            </h1>
+            <div class="fs-4 text-secondary mb-5 text-uppercase fw-bold">
+                {{ INFO_BASE.contato.local }} | {{ INFO_BASE.contato.telefone }} |
+                <a href="mailto:{{ INFO_BASE.contato.email }}" class="text-primary-custom text-decoration-none">
+                    {{ INFO_BASE.contato.email }}
+                </a>
+                |
+                <a href="https://{{ INFO_BASE.contato.linkedin }}" target="_blank">
+                    /sebastião-oliveira-53346833                 
+                </a>
+            </div>              
+            <p class="lead mb-0">{{ INFO_BASE.resumo }}</p>
+          
+        </section>
+       
 
-    <section id="experiencia" class="mb-5 border-bottom pb-5">
-        <h2 class="display-5 fw-bold text-uppercase mb-5">Experiência Profissional</h2>
-        
-        {% for exp in info.experiencias %}
-        <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-            <div class="flex-grow-1">
-                <h3 class="h3 fw-bold mb-0 text-uppercase">{{ exp.cargo }}</h3>
-                <div class="h5 fw-bold text-secondary mb-3">{{ exp.empresa }}</div>
-                <p class="text-muted mb-3">{{ exp.resumo_curto }}</p>
-                <ul class="text-muted">
-                    {% for detalhe in exp.detalhes %}
-                    <li class="mb-1">{{ detalhe }}</li>
-                    {% endfor %}
-                </ul>
+        <section id="experiencia" class="resume-section">
+            <h2 class="display-4 fw-bold text-uppercase mb-5">Experiência Profissional</h2>
+            
+            {% for exp in info.experiencias %}
+            <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                <div class="flex-grow-1">
+                    <h3 class="fw-bold text-uppercase mb-0">{{ exp.cargo }}</h3>
+                    
+                    <div class="h4 fw-bold text-secondary mb-3 text-uppercase">
+                        {{ exp.empresa }}
+                    </div>
+                    
+                    <p class="lead text-muted mb-3" style="font-size: 1.1rem; text-align: justify;">
+                        {{ exp.resumo_curto }}
+                    </p>
+
+                    {% if exp.detalhes %}
+                    <ul class="list-unstyled ms-2 ms-md-4 mt-3">
+                        {% for detalhe in exp.detalhes %}
+                        <li class="mb-2 d-flex align-items-start">
+                            <i class="bi bi-caret-right-fill text-primary-custom me-2 mt-1" style="font-size: 0.85rem;"></i>
+                            <span class="text-secondary" style="font-size: 1rem; line-height: 1.5;">
+                                {{ detalhe }}
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="flex-shrink-0 text-md-end">
+                    <span class="text-primary-custom fw-bold fs-5 text-uppercase">
+                        {{ exp.periodo }}
+                    </span>
+                </div>
             </div>
-            <div class="flex-shrink-0">
-                <span class="text-primary-custom fw-bold fs-5">{{ exp.periodo }}</span>
-            </div>
-        </div>
-        {% else %}
-        <p class="text-muted">Nenhuma experiência encontrada.</p>
-        {% endfor %}
-    </section>
-
-    <section id="habilidades" class="mb-5 pb-5">
-        <h2 class="display-5 fw-bold text-uppercase mb-5">Habilidades Técnicas</h2>
-        
-        <div class="fs-1 mb-4 text-primary-custom d-flex flex-wrap gap-3">
-            <i class="bi bi-database-fill-gear" title="SQL Server"></i>
-            <i class="bi bi-filetype-cs" title="C#"></i>
-            <i class="bi bi-bootstrap" title="Bootstrap"></i>
-            <i class="bi bi-git" title="Git"></i>
-            <i class="bi bi-code-slash" title="ASP Classic"></i>
-        </div>
-
-        <ul class="list-unstyled lead text-muted">
-            {% for hab in info.habilidades %}
-            <li class="mb-2">
-                <i class="bi bi-check2-circle text-primary-custom me-2"></i>
-                <strong>{{ hab.categoria }}:</strong> {{ hab.itens }}
-            </li>
             {% endfor %}
-        </ul>
-    </section>
+        </section>
+        <section id="habilidades" class="py-5"></section>
+            <h2 class="display-4 fw-bold text-uppercase mb-5">Habilidades</h2>
+            <div class="fs-1 mb-4 text-primary-custom d-flex flex-wrap gap-3">
+                <i class="bi bi-database-fill-gear" title="SQL Server"></i>
+                <i class="bi bi-filetype-cs" title="C#"></i>
+                <i class="bi bi-bootstrap" title="Bootstrap"></i>
+                <i class="bi bi-git" title="Git"></i>
+                <i class="bi bi-code-slash" title="ASP Classic"></i>
+            </div>            
+            <ul class="list-unstyled lead text-muted">
+                {% for hab in info.habilidades %}
+                <li class="mb-2">
+                    <i class="bi bi-check2-circle text-primary-custom me-2"></i>
+                    <strong>{{ hab.categoria }}:</strong> {{ hab.itens }}
+                </li>
+                {% endfor %}
+            </ul>            
+        </section>
 
+        </main>
 </div>
 {% endblock %}

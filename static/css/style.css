@@ -1,12 +1,18 @@
 :root {
+    /* Cores da Empresa (Directi) */
     --directi-blue: #003366;
     --directi-orange: #ff8c00;
-    --resume-terracotta: #bd5d38;
+    
+    /* Nova Paleta Profissional para o Currículo (Substituindo Terracota) */
+    --resume-primary: #002D5B;  /* Azul Oxford Profissional */
+    --resume-accent: #0056b3;   /* Azul Royal para links e ícones */
+    --resume-bg-light: #F8F9FA; /* Fundo cinza gelo para seções */
 }
 
 body {
     font-family: 'Saira Extra Condensed', sans-serif;
     overflow-x: hidden;
+    color: #333; /* Texto principal em cinza escuro para melhor leitura */
 }
 
 /* SIDEBAR FIXA (Desktop >= 768px) */
@@ -15,7 +21,7 @@ body {
         position: fixed;
         top: 0; left: 0; bottom: 0;
         width: 17rem;
-        background-color: var(--resume-terracotta);
+        background-color: var(--resume-primary); /* Agora Azul Marinho */
         z-index: 1000;
         display: block !important;
     }
@@ -28,25 +34,58 @@ body {
 /* NAVBAR MOBILE (Celas < 768px) */
 @media (max-width: 767.98px) {
     #sidebar-wrapper {
-        display: none; /* Esconde a sidebar lateral no mobile */
+        display: none; 
     }
     .navbar-mobile {
-        background-color: var(--resume-terracotta);
+        background-color: var(--resume-primary); /* Agora Azul Marinho */
         padding: 0.5rem 1rem;
     }
     .content-scroll {
-        margin-left: 0; /* Remove a margem no mobile */
+        margin-left: 0; 
         padding-top: 1rem;
     }
 }
 
 /* Estilos de Texto e Ícones */
-.text-primary-custom { color: var(--resume-terracotta) !important; }
-.nav-link { color: rgba(255,255,255,0.6) !important; font-weight: 800; text-transform: uppercase; }
-.nav-link:hover, .nav-link.active { color: #fff !important; }
+.text-primary-custom { 
+    color: var(--resume-accent) !important; /* Destaque em Azul Royal */
+}
+
+.nav-link { 
+    color: rgba(255,255,255,0.7) !important; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+}
+
+.nav-link:hover, .nav-link.active { 
+    color: #fff !important; 
+    background-color: rgba(255,255,255,0.05); /* Leve destaque no hover */
+}
 
 /* Ajuste das Listas Dinâmicas */
 .resume-section {
     padding: 3rem 1.5rem;
     max-width: 900px;
+    border-bottom: 1px solid #e9ecef; /* Linhas divisórias mais sutis e limpas */
+}
+.section-title { 
+    color: #2c3e50; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    border-bottom: 2px solid #2c3e50; 
+    padding-bottom: 5px; 
+    margin-bottom: 20px; 
+    
+}
+
+/* Estilo para os ícones de habilidades no novo padrão */
+.dev-icons i {
+    color: var(--resume-accent);
+    margin-right: 15px;
+    transition: transform 0.2s;
+}
+
+.dev-icons i:hover {
+    transform: scale(1.1);
 }

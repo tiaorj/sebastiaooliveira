@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="content-scroll p-5">
+            
+    <section id="habilidades" class="py-5"></section>
+            <h2 class="display-4 fw-bold text-uppercase mb-5">Habilidades</h2>
+            <div class="fs-1 mb-4 text-primary-custom d-flex flex-wrap gap-3">
+                <i class="bi bi-database-fill-gear" title="SQL Server"></i>
+                <i class="bi bi-filetype-cs" title="C#"></i>
+                <i class="bi bi-bootstrap" title="Bootstrap"></i>
+                <i class="bi bi-git" title="Git"></i>
+                <i class="bi bi-code-slash" title="ASP Classic"></i>
+            </div>            
+            <ul class="list-unstyled lead text-muted">
+                {% for hab in habilidades %}
+                <li class="mb-2">
+                    <i class="bi bi-check2-circle text-primary-custom me-2"></i>
+                    <strong>{{ hab.categoria }}:</strong> {{ hab.itens }}
+                </li>
+                {% endfor %}
+            </ul>            
+        </section>
+
+</main>
+
+{% endblock %}

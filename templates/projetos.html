@@ -1,33 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}Projetos{% endblock %}
+
+{% block title %}Projetos - {{ INFO_BASE.nome }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<section class="py-5 bg-light">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold text-uppercase mb-2">Projetos & <span class="text-primary-custom">Soluções</span></h1>
+        <p class="lead text-muted mb-5">Engenharia de software aplicada a desafios complexos e modernização de ecossistemas.</p>
 
-        <div class="text-center mb-5">
-        <h1 class="display-2 fw-bold">
-            <span style="color: #003366;">Destaques do </span><span style="color: #ff8c00;">Portfólio</span> 
-            <small class="fs-4 text-muted d-block mt-2">Projetos</small>
-        </h1>
-    </div>
-
-    <div class="row g-4">
-        {% for p in projetos %}
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center">
-                    <div class="display-4 text-primary mb-3">
-                        <i class="bi {{ p.icone }}"></i>
+        <div class="row g-4">
+            {% for p in projetos %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm transition-hover">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi {{ p.IconeClass }} fs-1 text-primary-custom me-3"></i>
+                            <h4 class="fw-bold mb-0 text-uppercase" style="font-size: 1.1rem;">{{ p.Titulo }}</h4>
+                        </div>
+                        <p class="text-muted small mb-4">{{ p.Descricao }}</p>
+                        <div class="pt-3 border-top">
+                            <span class="badge bg-white text-primary-custom border border-primary-custom">{{ p.Tecnologias }}</span>
+                        </div>
                     </div>
-                    <h5 class="card-title fw-bold">{{ p.titulo }}</h5>
-                    <p class="card-text text-muted small">{{ p.descricao }}</p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pb-3">
-                    <small class="text-primary fw-bold">{{ p.tecnologias }}</small>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
+</section>
+
+<style>
+    .transition-hover:hover { transform: translateY(-5px); transition: 0.3s; }
+</style>
 {% endblock %}

@@ -1,25 +1,62 @@
 {% extends 'base.html' %}
-{% block title %}Contato{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <h2 class="fw-bold mb-4">Vamos Conversar?</h2>
-            <p class="text-muted mb-5">Sinta-se à vontade para entrar em contato para projetos, consultorias ou networking.</p>
-            
-            <div class="list-group shadow-sm">
-                <a href="https://wa.me/5541999113960" target="_blank" class="list-group-item list-group-item-action py-3 text-success">
-                    <i class="bi bi-whatsapp"></i> WhatsApp: (41) 99911-3960
-                </a>
-                <a href="mailto:{{ info.contato.email }}" class="list-group-item list-group-item-action py-3 text-primary">
-                    <i class="bi bi-envelope-at"></i> {{ info.contato.email }}
-                </a>
-                <a href="https://{{ info.contato.linkedin }}" target="_blank" class="list-group-item list-group-item-action py-3 text-dark">
-                    <i class="bi bi-linkedin"></i> LinkedIn Profissional
-                </a>
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h2 class="display-5 fw-bold text-uppercase mb-4">Vamos <span class="text-primary-custom">Conversar</span></h2>
+                <p class="text-muted mb-5">Disponível para consultorias, arquitetura de novos projetos e modernização de sistemas legados.</p>
+                
+                <div class="d-flex mb-4">
+                    <i class="bi bi-geo-alt text-primary-custom fs-3 me-3"></i>
+                    <div>
+                        <h5 class="fw-bold mb-0">Localização</h5>
+                        <p class="text-muted">{{ INFO_BASE.contato.local }}</p>
+                    </div>
+                </div>
+                
+                <div class="d-flex mb-4">
+                    <i class="bi bi-envelope-at text-primary-custom fs-3 me-3"></i>
+                    <div>
+                        <h5 class="fw-bold mb-0">E-mail</h5>
+                        <p class="text-muted">{{ INFO_BASE.contato.email }}</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <i class="bi bi-linkedin text-primary-custom fs-3 me-3"></i>
+                    <div>
+                        <h5 class="fw-bold mb-0">LinkedIn</h5>
+                        <p class="text-muted">        
+                            <a href="https://{{ INFO_BASE.contato.linkedin }}" target="_blank">/sebastião-oliveira-53346833</i></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="bg-light p-5 rounded shadow-sm">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-uppercase small">Nome</label>
+                            <input type="text" name="nome" class="form-control" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-uppercase small">E-mail</label>
+                            <input type="email" name="email" class="form-control" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-uppercase small">Mensagem</label>
+                            <textarea name="mensagem" class="form-control" rows="5" placeholder="Como podemos ajudar?" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3" style="background-color: var(--directi-blue); border: none;">
+                            Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}
