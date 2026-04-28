@@ -1,172 +1,62 @@
 {% extends 'base.html' %}
-{% block title %}Especialista | Sebastião Oliveira{% endblock %}
+{% block title %}Currículo | Sebastião Oliveira{% endblock %}
 
 {% block content %}
-<div class="container-fluid p-0">
-    <div class="row g-0">
-        <nav class="col-md-3 col-lg-2 d-none d-md-block sidebar shadow-sm" id="sidebar-fixa">
-            <div class="sidebar-content text-center pt-5">
-                <div class="mb-4">
-                    <img src="{{ url_for('static', filename='minha-foto.jpg') }}" 
-                         class="img-fluid rounded-circle border border-4 border-white-50 shadow" 
-                         style="width: 150px; height: 150px; object-fit: cover;" alt="Sebastião Oliveira">
-                </div>
-                
-                <h3 class="text-white h5 mb-5 fw-bold text-uppercase px-2">Sebastião Oliveira</h3>
+<div class="px-4 px-md-5">
+<section id="sobre" class="py-5 border-bottom">
+    <h1 class="display-1 fw-bold text-uppercase mb-0">
+        {{ info.especialista.split(' ')[0] }} 
+        <span class="text-primary-custom">{{ info.especialista.split(' ')[1:] | join(' ') }}</span>
+    </h1>
 
-                <ul class="nav flex-column fw-bold text-uppercase">
-                    <li class="nav-item"><a class="nav-link text-white-50" href="#sobre">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link text-white-50" href="#experiencia">Experiência</a></li>
-                    <li class="nav-item"><a class="nav-link text-white-50" href="#formacao">Formação</a></li>
-                    <li class="nav-item"><a class="nav-link text-white-50" href="#habilidades">Habilidades</a></li>
-                </ul>
-            </div>
-        </nav>
+    <div class="fs-4 fw-semibold text-secondary mb-5">
+        {{ info.contato.local }} · {{ info.contato.telefone }} · 
+        <a href="mailto:{{ info.contato.email }}" class="text-primary-custom">{{ info.contato.email }}</a>
+    </div>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 py-5 content-scroll">
-            
-            <section id="sobre" class="resume-section mb-5 py-5 border-bottom">
-                <h1 class="display-1 fw-bold text-uppercase mb-0">
-                    Sebastião <span class="text-primary-custom">Oliveira</span>
-                </h1>
-                <div class="subheading mb-5 text-secondary fw-semibold fs-4">
-                    Rio de Janeiro – RJ · (41) 99911-3960 · 
-                    <a href="mailto:tiaorj@gmail.com" class="text-primary-custom">tiaorj@gmail.com</a>
-                </div>
-                <p class="lead mb-5" style="text-align: justify;">{{ info.resumo }}</p>
-                
-                <div class="social-icons">
-                    <a class="social-icon btn btn-dark rounded-circle p-3" href="https://linkedin.com/in/sebastião-oliveira-53346833" target="_blank">
-                        <i class="bi bi-linkedin fs-4"></i>
-                    </a>
-                </div>
-            </section>
+    <p class="lead mb-5">{{ info.resumo }}</p>
 
-            <section id="experiencia" class="resume-section mb-5 py-5 border-bottom">
-                <h2 class="display-5 fw-bold text-uppercase mb-5">Experiência</h2>
-                {% for exp in info.experiencias %}
-                <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <div class="flex-grow-1">
-                        <h3 class="h3 fw-bold mb-0 text-uppercase">{{ exp.cargo }}</h3>
-                        <div class="h5 fw-bold text-secondary mb-3">{{ exp.empresa }}</div>
-                        <p class="text-muted mb-3">{{ exp.resumo_curto }}</p>
-                        <ul class="text-muted">
-                            {% for detalhe in exp.detalhes %}
-                            <li class="mb-1">{{ detalhe }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <span class="text-primary-custom fw-bold fs-5">{{ exp.periodo }}</span>
-                    </div>
-                </div>
-                {% endfor %}
-            </section>
+    <div class="social-icons">
+        <a class="btn btn-dark rounded-circle p-3" href="https://{{ info.contato.linkedin }}" target="_blank">
+            <i class="bi bi-linkedin fs-4"></i>
+        </a>
+    </div>
+</section>
 
-            <section id="formacao" class="resume-section mb-5 py-5 border-bottom">
-                <h2 class="display-5 fw-bold text-uppercase mb-5">Formação</h2>
-                {% for curso in info.formacao %}
-                <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
-                    <div class="flex-grow-1">
-                        <h3 class="h4 fw-bold mb-0 text-uppercase">{{ curso }}</h3>
-                    </div>
-                </div>
-                {% endfor %}
-            </section>
-
-            <section id="habilidades" class="resume-section mb-5 py-5">
-                <h2 class="display-5 fw-bold text-uppercase mb-5">Habilidades</h2>
-                
-                <div class="subheading mb-3 fw-bold text-secondary text-uppercase">Linguagens, Ferramentas & Frameworks</div>
-                
-                <div class="dev-icons fs-1 mb-4 d-flex flex-wrap gap-3">
-                    <i class="bi bi-code-slash text-primary-custom" title="ASP Classic / VBScript / VB"></i>
-                    <i class="bi bi-filetype-cs text-primary-custom" title="C# / ASP.NET"></i>
-                    <i class="bi bi-terminal-fill text-primary-custom" title="Delphi / Python / Node.js"></i>
-                    
-                    <i class="bi bi-bootstrap-fill text-primary-custom" title="Bootstrap"></i>
-                    <i class="bi bi-filetype-js text-primary-custom" title="JavaScript / jQuery / Ajax"></i>
-                    
-                    <i class="bi bi-database-fill text-primary-custom" title="SQL Server"></i>
-                    <i class="bi bi-database-add text-primary-custom" title="Oracle / PostgreSQL"></i>
-                    
-                    <i class="bi bi-git text-primary-custom" title="Git"></i>
-                    <i class="bi bi-p-circle-fill text-primary-custom" title="TortoiseSVN"></i>
-                    <i class="bi bi-kanban-fill text-primary-custom" title="JIRA / Scrum / Kanban"></i>
-                    <i class="bi bi-bar-chart-fill text-primary-custom" title="Power BI"></i>
-                </div>
-
-                <ul class="fa-ul mb-0 text-muted">
-                    <li class="mb-2">
-                        <span class="fa-li"><i class="bi bi-check2-circle text-primary-custom"></i></span>
-                        <strong>Desenvolvimento:</strong> Especialista Full-stack em ASP Classic, C#, ASP.NET, VBScript, VB e Delphi[cite: 10, 11].
-                    </li>
-                    <li class="mb-2">
-                        <span class="fa-li"><i class="bi bi-check2-circle text-primary-custom"></i></span>
-                        <strong>Front-end:</strong> HTML5, CSS, Bootstrap, JavaScript, jQuery e Ajax[cite: 11].
-                    </li>
-                    <li class="mb-2">
-                        <span class="fa-li"><i class="bi bi-check2-circle text-primary-custom"></i></span>
-                        <strong>Banco de Dados:</strong> Especialista em SQL Server, Oracle e PostgreSQL (Performance Tuning)[cite: 12, 13].
-                    </li>
-                    <li class="mb-2">
-                        <span class="fa-li"><i class="bi bi-check2-circle text-primary-custom"></i></span>
-                        <strong>Versionamento e Gestão:</strong> Git, TortoiseSVN, JIRA e Metodologias Ágeis (Scrum, Kanban)[cite: 16].
-                    </li>
-                    <li class="mb-2">
-                        <span class="fa-li"><i class="bi bi-check2-circle text-primary-custom"></i></span>
-                        <strong>Outros:</strong> Noções em Node.js e Python[cite: 11].
-                    </li>
-                </ul>
-
-
-                <ul class="fa-ul mb-0 text-muted">
-                    {% for hab in info.habilidades %}
-                    <li class="mb-2">
-                        <span class="fa-li"><i class="bi bi-check2-circle text-primary-custom"></i></span>
-                        <strong>{{ hab.categoria }}:</strong> {{ hab.itens }}
-                    </li>
+    <section id="experiencias" class="py-5 border-bottom">
+        <h2 class="display-4 fw-bold text-uppercase mb-5">Experiência</h2>
+        {% for exp in info.experiencias %}
+        <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+            <div class="flex-grow-1">
+                <h3 class="h3 fw-bold mb-0 text-uppercase">{{ exp.cargo }}</h3>
+                <div class="h5 fw-bold text-secondary mb-3">{{ exp.empresa }}</div>
+                <ul class="text-muted small">
+                    {% for detalhe in exp.detalhes %}
+                    <li>{{ detalhe }}</li>
                     {% endfor %}
                 </ul>
-            </section>
-        </main>
-    </div>
+            </div>
+            <div class="flex-shrink-0"><span class="text-primary-custom fw-bold fs-5">{{ exp.periodo }}</span></div>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section id="habilidades" class="py-5">
+        <h2 class="display-4 fw-bold text-uppercase mb-5">Habilidades</h2>
+        <div class="dev-icons mb-4">
+            <i class="bi bi-code-slash text-primary-custom" title="ASP Classic, VBScript, VB, Delphi"></i>
+            <i class="bi bi-filetype-cs text-primary-custom" title="C#, ASP.NET"></i>
+            <i class="bi bi-bootstrap-fill text-primary-custom" title="Bootstrap"></i>
+            <i class="bi bi-filetype-js text-primary-custom" title="JS, jQuery, Ajax"></i>
+            <i class="bi bi-database-fill text-primary-custom" title="SQL Server, Oracle, PostgreSQL"></i>
+            <i class="bi bi-git text-primary-custom" title="Git, SVN"></i>
+            <i class="bi bi-kanban-fill text-primary-custom" title="JIRA, Scrum, Kanban"></i>
+        </div>
+        <ul class="list-unstyled text-muted lead">
+            {% for hab in info.habilidades %}
+            <li class="mb-2"><i class="bi bi-check2-circle text-primary-custom me-2"></i><strong>{{ hab.categoria }}:</strong> {{ hab.itens }}</li>
+            {% endfor %}
+        </ul>
+    </section>
 </div>
-
-<style>
-    /* Estilo para fixar o menu lateral à esquerda */
-    #sidebar-fixa {
-        background-color: #bd5d38 !important;
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 100;
-        padding: 0;
-        overflow-y: auto;
-    }
-
-    .text-primary-custom {
-        color: #bd5d38 !important;
-    }
-
-    .fa-ul { list-style: none; padding-left: 1.5rem; }
-    .fa-li { position: absolute; left: 0; }
-
-    @media (min-width: 768px) {
-        .content-scroll { margin-left: 25%; }
-    }
-    @media (min-width: 992px) {
-        .content-scroll { margin-left: 16.666667%; }
-    }
-
-    .sidebar .nav-link { padding: 1rem; transition: 0.3s; }
-    .sidebar .nav-link:hover { color: #fff !important; background-color: rgba(255,255,255,0.1); }
-
-    @media (max-width: 767.98px) {
-        #sidebar-fixa { position: relative; width: 100%; min-height: auto; }
-        .content-scroll { margin-left: 0; }
-        .display-1 { font-size: 3rem; }
-    }
-</style>
 {% endblock %}

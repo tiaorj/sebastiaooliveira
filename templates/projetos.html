@@ -3,7 +3,14 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center mb-5 fw-bold">Destaques do Portfólio</h2>
+
+        <div class="text-center mb-5">
+        <h1 class="display-2 fw-bold">
+            <span style="color: #003366;">Destaques do </span><span style="color: #ff8c00;">Portfólio</span> 
+            <small class="fs-4 text-muted d-block mt-2">Projetos</small>
+        </h1>
+    </div>
+
     <div class="row g-4">
         {% for p in projetos %}
         <div class="col-md-4">

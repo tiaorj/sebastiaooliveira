@@ -1,97 +1,42 @@
 {% extends 'base.html' %}
-{% block title %}DIRECTI Solutions | Consultoria Especializada{% endblock %}
+{% block title %}DIRECTI Solutions | Home{% endblock %}
 
 {% block content %}
-<section class="py-5 bg-white border-bottom">
-    <div class="container text-center">
-        <div class="mb-4">
-            <h1 class="display-3 fw-bold text-dark">
-                <span style="color: #0056b3;">DIRECT</span><span style="color: #ff8c00;">I</span> 
-                <small class="fs-4 text-muted d-block mt-2">Solutions</small>
-            </h1>
-        </div>
-        <h2 class="display-6 fw-light mb-4 text-secondary">Especialistas em Modernização de Sistemas e Inteligência de Dados</h2>
-        <p class="lead mx-auto" style="max-width: 800px;">
-            Transformamos sistemas legados em soluções modernas, otimizamos bancos de dados de alta complexidade 
-            e entregamos inteligência de negócios para decisões estratégicas.
-        </p>
-        <div class="mt-4">
-            <a href="/contato" class="btn btn-primary btn-lg px-4 me-md-2 shadow-sm">Solicitar Consultoria</a>
-            <a href="/sobre" class="btn btn-outline-secondary btn-lg px-4 shadow-sm">Sobre o Especialista</a>
-        </div>
-    </div>
-</section>
-
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row g-4 text-center">
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-3">
-                    <div class="card-body">
-                        <div class="display-5 text-primary mb-3"><i class="bi bi-rocket-takeoff"></i></div>
-                        <h4 class="fw-bold">Modernização</h4>
-                        <p class="text-muted small">Revitalização de sistemas ASP Classic, migração cross-browser e eliminação da dependência de navegadores antigos.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-3">
-                    <div class="card-body">
-                        <div class="display-5 text-warning mb-3"><i class="bi bi-database-check"></i></div>
-                        <h4 class="fw-bold">Performance</h4>
-                        <p class="text-muted small">Tuning avançado em SQL Server e Oracle. Otimização de Stored Procedures e arquitetura para alta volumetria.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-3">
-                    <div class="card-body">
-                        <div class="display-5 text-info mb-3"><i class="bi bi-pie-chart"></i></div>
-                        <h4 class="fw-bold">Inteligência</h4>
-                        <p class="text-muted small">Criação de Dashboards estratégicos com Power BI e governança de dados para apoio à tomada de decisão.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="py-4 py-md-5 bg-white">
-    <div class="container">
-        <h3 class="text-center fw-bold mb-4 mb-md-5">Cases de Sucesso</h3>
+<section id="home-directi" class="py-5 px-md-5 bg-white min-vh-100 d-flex flex-column justify-content-center">
+    <div class="text-center mb-5">
+        <h1 class="display-2 fw-bold">
+            <span style="color: #003366;">{{ info.nome.split(' ')[0] }} </span><span style="color: #ff8c00;">{{ info.nome.split(' ')[1] }}</span> 
+            <small class="fs-4 text-muted d-block mt-2">{{ info.nome.split(' ')[2:] | join(' ') }}</small>
+        </h1>
         
-        <div class="row g-3"> {% for case in cases %}
-            <div class="col-12 col-md-6 col-lg-4"> <div class="card h-100 border-0 bg-light shadow-sm">
-                    <div class="card-body p-3">
-                        <span class="badge bg-primary mb-2" style="font-size: 0.75rem;">{{ case.servico }}</span>
-                        <h5 class="fw-bold h6">{{ case.cliente }}</h5>
-                        <p class="text-muted small mb-0" style="text-align: justify;">{{ case.descricao }}</p>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 pt-0">
-                        <hr class="my-2">
-                        <p class="mb-1 small"><strong><i class="bi bi-graph-up-arrow text-success"></i> Resultado:</strong></p>
-                        <small class="text-dark d-block">{{ case.resultado }}</small>
-                    </div>
-                </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4 text-center">
+            <div class="p-4 border-0 bg-light rounded shadow-sm h-100">
+                <i class="bi bi-rocket-takeoff fs-1 text-primary-custom"></i>
+                <h4 class="mt-3 fw-bold">Modernização</h4>
+                <p class="text-muted small">Revitalização de ecossistemas legados ASP Classic e modernização cross-browser.</p>
             </div>
-            {% endfor %}
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="p-4 border-0 bg-light rounded shadow-sm h-100">
+                <i class="bi bi-database-fill-check fs-1 text-primary-custom"></i>
+                <h4 class="mt-3 fw-bold">Performance Tuning</h4>
+                <p class="text-muted small">Otimização avançada de SQL Server e Oracle para processamento de alta volumetria.</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="p-4 border-0 bg-light rounded shadow-sm h-100">
+                <i class="bi bi-pie-chart-fill fs-1 text-primary-custom"></i>
+                <h4 class="mt-3 fw-bold">Business Intelligence</h4>
+                <p class="text-muted small">Engenharia de dados e Dashboards estratégicos com Power BI e Power Query.</p>
+            </div>
         </div>
     </div>
-</section>
-
-<section class="py-5" style="background: linear-gradient(135deg, #0056b3 0%, #003366 100%);">
-    <div class="container text-center text-white">
-        <h3 class="fw-bold mb-4">Pronto para modernizar sua tecnologia?</h3>
-        <p class="lead mb-4">A DIRECTI tem a expertise técnica necessária para resolver gargalos críticos de sistemas e dados.</p>
-        <a href="/contato" class="btn btn-warning btn-lg px-5 fw-bold text-dark">Entre em Contato Agora</a>
+    
+    <div class="text-center mt-5">
+        <a href="/sobre" class="btn btn-dark btn-lg px-5 rounded-pill">Conheça o Arquiteto de Software</a>
     </div>
 </section>
-
-<style>
-    /* Ajustes finos de cores baseados na sua marca */
-    .btn-primary { background-color: #0056b3; border-color: #0056b3; }
-    .text-primary { color: #0056b3 !for; }
-    .btn-warning { background-color: #ff8c00; border-color: #ff8c00; color: white; }
-    .btn-warning:hover { background-color: #e67e00; border-color: #e67e00; color: white; }
-</style>
 {% endblock %}

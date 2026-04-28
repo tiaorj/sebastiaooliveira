@@ -22,7 +22,7 @@ CONN_STR = (
 
 # Informações base da DIRECTI / Sebastião
 INFO_BASE = {
-    'nome': 'DIRECTI Solutions',
+    'nome': 'DIRECT TI SOLUÇÕES EM TECNOLOGIA LTDA',
     'especialista': 'SEBASTIÃO OLIVEIRA',
     'cargo': 'Analista de Sistemas Sênior & Arquiteto de Software',
     'contato': {
