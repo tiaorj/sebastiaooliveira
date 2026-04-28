@@ -1,73 +1,52 @@
-/* Paleta de Cores DIRECTI & Pessoal */
 :root {
     --directi-blue: #003366;
     --directi-orange: #ff8c00;
     --resume-terracotta: #bd5d38;
-    --bg-light: #f8f9fa;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
+    font-family: 'Saira Extra Condensed', sans-serif;
     overflow-x: hidden;
 }
 
-/* Sidebar Fixa à Esquerda */
-#sidebar-fixa {
-    background-color: var(--resume-terracotta) !important;
-    position: fixed;
-    top: 0; 
-    bottom: 0; 
-    left: 0;
-    z-index: 1000;
-    overflow-y: auto;
-    padding: 0;
-}
-
-/* Ajuste de margem para o conteúdo não ser sobreposto pela sidebar */
+/* SIDEBAR FIXA (Desktop >= 768px) */
 @media (min-width: 768px) {
-    .content-scroll { 
-        margin-left: 25%; /* Alinhado com col-md-3 */
+    #sidebar-wrapper {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 17rem;
+        background-color: var(--resume-terracotta);
+        z-index: 1000;
+        display: block !important;
     }
+    .content-scroll {
+        margin-left: 17rem; /* Empurra o conteúdo para a direita */
+    }
+    .navbar-toggler { display: none; }
 }
 
-@media (min-width: 992px) {
-    .content-scroll { 
-        margin-left: 16.666667%; /* Alinhado com col-lg-2 */
-    }
-}
-
-/* Responsividade Mobile */
+/* NAVBAR MOBILE (Celas < 768px) */
 @media (max-width: 767.98px) {
-    #sidebar-fixa { 
-        position: relative; 
-        width: 100%; 
-        min-height: auto; 
+    #sidebar-wrapper {
+        display: none; /* Esconde a sidebar lateral no mobile */
     }
-    .content-scroll { 
-        margin-left: 0; 
+    .navbar-mobile {
+        background-color: var(--resume-terracotta);
+        padding: 0.5rem 1rem;
+    }
+    .content-scroll {
+        margin-left: 0; /* Remove a margem no mobile */
+        padding-top: 1rem;
     }
 }
 
-/* Elementos de Interface */
+/* Estilos de Texto e Ícones */
 .text-primary-custom { color: var(--resume-terracotta) !important; }
-.sidebar .nav-link { 
-    padding: 1rem; 
-    transition: 0.3s; 
-    color: rgba(255,255,255,0.7) !important;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-.sidebar .nav-link:hover { 
-    color: #fff !important; 
-    background-color: rgba(255,255,255,0.1); 
-}
+.nav-link { color: rgba(255,255,255,0.6) !important; font-weight: 800; text-transform: uppercase; }
+.nav-link:hover, .nav-link.active { color: #fff !important; }
 
-.dev-icons i {
-    transition: transform 0.2s;
-    display: inline-block;
-}
-.dev-icons i:hover {
-    transform: scale(1.2);
-    color: var(--directi-orange) !important;
+/* Ajuste das Listas Dinâmicas */
+.resume-section {
+    padding: 3rem 1.5rem;
+    max-width: 900px;
 }
