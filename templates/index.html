@@ -21,33 +21,40 @@
 
     <section id="experiencia" class="mb-5 border-bottom pb-5">
         <h2 class="display-5 fw-bold text-uppercase mb-5">Experiência Profissional</h2>
+        
         {% for exp in info.experiencias %}
-        <div class="row mb-5">
-            <div class="col-md-9">
-                <h3 class="h3 fw-bold text-uppercase mb-0">{{ exp.cargo }}</h3>
+        <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+            <div class="flex-grow-1">
+                <h3 class="h3 fw-bold mb-0 text-uppercase">{{ exp.cargo }}</h3>
                 <div class="h5 fw-bold text-secondary mb-3">{{ exp.empresa }}</div>
+                <p class="text-muted mb-3">{{ exp.resumo_curto }}</p>
                 <ul class="text-muted">
                     {% for detalhe in exp.detalhes %}
-                    <li class="mb-2">{{ detalhe }}</li>
+                    <li class="mb-1">{{ detalhe }}</li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-md-3 text-md-end">
+            <div class="flex-shrink-0">
                 <span class="text-primary-custom fw-bold fs-5">{{ exp.periodo }}</span>
             </div>
         </div>
+        {% else %}
+        <p class="text-muted">Nenhuma experiência encontrada.</p>
         {% endfor %}
     </section>
 
     <section id="habilidades" class="mb-5 pb-5">
         <h2 class="display-5 fw-bold text-uppercase mb-5">Habilidades Técnicas</h2>
-        <div class="fs-1 mb-4 text-primary-custom">
+        
+        <div class="fs-1 mb-4 text-primary-custom d-flex flex-wrap gap-3">
             <i class="bi bi-database-fill-gear" title="SQL Server"></i>
             <i class="bi bi-filetype-cs" title="C#"></i>
             <i class="bi bi-bootstrap" title="Bootstrap"></i>
             <i class="bi bi-git" title="Git"></i>
+            <i class="bi bi-code-slash" title="ASP Classic"></i>
         </div>
-        <ul class="list-unstyled lead">
+
+        <ul class="list-unstyled lead text-muted">
             {% for hab in info.habilidades %}
             <li class="mb-2">
                 <i class="bi bi-check2-circle text-primary-custom me-2"></i>
