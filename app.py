@@ -6,10 +6,10 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 # --- CONFIGURAÇÃO DE CONEXÃO ---
-if platform.system() == 'Windows':
-    DRIVER = '{SQL Server}'
-else:
+if platform.system() != 'Windows':
     DRIVER = '{ODBC Driver 17 for SQL Server}'
+else:
+    DRIVER = '{SQL Server}'
 
 CONN_STR = (
     f"Driver={DRIVER};"
