@@ -42,7 +42,7 @@ def login():
                 conn.close()
                 
                 flash(f'Bem-vindo, {usuario.Nome}!', 'success')
-                return redirect(url_for('curriculo.sobre'))
+                return redirect(url_for('dashboard.index'))
         
         conn.close()
         flash('Usuário ou senha inválidos.', 'danger')

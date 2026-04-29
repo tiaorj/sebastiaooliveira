@@ -4,6 +4,7 @@ from routes.empresa import empresa_bp
 from routes.curriculo import curriculo_bp
 from routes.admin import admin_bp  # 1. Importe o blueprint
 from datetime import datetime
+from routes.dashboard import dashboard_bp
 
 app = Flask(__name__)
 
@@ -17,6 +18,7 @@ def formatar_data(value, formato='%d/%m/%Y'):
     return value
 
 app.register_blueprint(admin_bp)
+app.register_blueprint(dashboard_bp)
 
 app.secret_key = 'chave_secreta_super_protegida_da_directi'
 
