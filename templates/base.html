@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navMobile">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="/">Empresa</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sobre">CurrÃ­culo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sobre">Currí­culo</a></li>
                     <li class="nav-item"><a class="nav-link" href="/projetos">Projetos</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contato">Contato</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Formacao">Formação</a></li>
@@ -35,11 +35,11 @@
     <div id="sidebar-wrapper" class="text-center">
         <div class="pt-5 px-3">
             <img src="{{ url_for('static', filename='img/minha-foto.jpg') }}" class="img-fluid rounded-circle border border-4 border-white-50 mb-3 shadow" style="width: 160px; height: 160px; object-fit: cover;">
-            <h3 class="text-white h5 fw-bold text-uppercase mb-5">SebastiÃ£o Oliveira</h3>
+            <h3 class="text-white h5 fw-bold text-uppercase mb-5">{{ INFO_BASE.get('especialista', 'Nome não definido') }}</h3>
         
             <ul class="nav flex-column">
                 <li class="nav-item"><a class="nav-link" href="/">Empresa</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('curriculo.sobre') }}">Especialista/CurrÃ­culo</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('curriculo.sobre') }}">Especialista/Currí­culo</a></li>
                 <li class="nav-item"><a class="nav-link" href="/projetos">Projetos</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('empresa.contato') }}">Contato</a></li>
 

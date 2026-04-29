@@ -2,13 +2,44 @@
 
 {% block content %}
 <main class="content-scroll p-5">
-    <h2 class="display-4 fw-bold text-uppercase mb-5">Formação Acadêmica</h2>
-    {% for f in formacao %}
-    <div class="mb-5">
-        <h3 class="fw-bold text-uppercase text-primary-custom">{{ f.curso }}</h3>
-        <div class="h5 fw-bold text-secondary">{{ f.instituicao }}</div>
-        <span class="text-muted">{{ f.ano }}</span>
+    <h2 class="display-4 fw-bold text-uppercase mb-5">Formação <span class="text-primary-custom">Acadêmica</span></h2>
+    <div class="row mb-5">
+        {% for f in formacao %}
+        <div class="col-12 mb-4 border-start border-4 border-primary-custom ps-4">
+            <h3 class="h4 fw-bold mb-0 text-uppercase">{{ f.curso }}</h3>
+            <div class="text-secondary fw-bold">{{ f.instituicao }}</div>
+            <div class="text-muted small">{{ f.ano }}</div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
+    {% if certificados %}
+    <h2 class="display-5 fw-bold text-uppercase mb-4 mt-5">Certificações & <span class="text-primary-custom">Badges</span></h2>
+    <div class="row g-4">
+        {% for c in certificados %}
+        <div class="col-md-6 col-lg-4">
+            <a href="{{ c.link }}" target="_blank" class="text-decoration-none">
+                <div class="d-flex align-items-center p-3 bg-light rounded border shadow-sm transition-hover">
+                    <i class="bi {{ c.icone }} text-primary-custom fs-2 me-3"></i>
+                    <div>
+                        <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.9rem;">{{ c.nome }}</h6>
+                        <small class="text-muted">{{ c.instituicao }}</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 </main>
+
+<style>
+    /* Pequeno efeito para parecer um "badge" clicável */
+    .transition-hover:hover {
+        background-color: #fff !important;
+        border-color: var(--directi-blue) !important;
+        transform: translateY(-3px);
+        transition: 0.3s;
+    }
+</style>
 {% endblock %}

@@ -15,7 +15,7 @@ def sobre():
                FORMAT(E.DataInicio, 'MM/yyyy') + ' - ' + ISNULL(FORMAT(E.DataFim, 'MM/yyyy'), 'Atual') as Periodo
         FROM ExperienciaProfissional E
         JOIN Empresa Em ON E.EmpresaId = Em.EmpresaId
-        ORDER BY E.DataInicio DESC
+        ORDER BY E.DataFim
     """)
     exps_raw = cursor.fetchall()
 
@@ -52,8 +52,20 @@ def formacao():
             'AnoInicio': row.AnoInicio,
             'ano': row.AnoConclusao
         })
+
+
+    # Busca Certificações (A nova tabela!)
+    cursor.execute("SELECT Nome, Instituicao, IconeClass, LinkVerificacao FROM Certificacoes")
+    certificados_lista = []
+    for row in cursor.fetchall():
+        certificados_lista.append({
+            'nome': row.Nome,
+            'instituicao': row.Instituicao,
+            'icone': row.IconeClass,
+            'link': row.LinkVerificacao
+        })
     conn.close()
-    return render_template('Formacao.html', formacao=formacao_lista)
+    return render_template('Formacao.html', formacao=formacao_lista, certificados=certificados_lista)
 
 @curriculo_bp.route('/habilidades')
 def habilidades():
