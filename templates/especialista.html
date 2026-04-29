@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5 bg-light min-vh-100">
+    <div class="container">
+        
+        <div class="text-center mb-5">
+            <div class="position-relative d-inline-block">
+                <img src="{{ url_for('static', filename='img/minha-foto.jpg') }}" 
+                     class="rounded-circle shadow-lg mb-3 border border-4 border-white" 
+                     style="width: 160px; height: 160px; object-fit: cover;">
+            </div>
+            <h1 class="fw-bold text-uppercase display-4 mb-0" style="letter-spacing: -1px;">
+                {{ INFO_BASE.get('especialista', 'Sebastião Oliveira') }}
+            </h1>
+            <p class="lead text-secondary text-uppercase fw-bold small" style="letter-spacing: 2px;">
+                Arquiteto de Software & Engenheiro de Dados
+            </p>
+        </div>
+
+        <div class="row g-5">
+            
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center border-bottom border-primary-custom border-2 pb-2 mb-4">
+                    <h2 class="h3 fw-bold text-uppercase mb-0">Trajetória <span class="text-primary-custom">Profissional</span></h2>
+                </div>
+
+                {% for exp in experiencias %}
+                <div class="mb-5 position-relative ps-4 border-start border-3 border-light-subtle">
+                    <div class="position-absolute start-0 translate-middle-x bg-primary-custom rounded-circle" 
+                         style="width: 15px; height: 15px; margin-left: -1.5px; margin-top: 10px;"></div>
+                    
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <div>
+                            <span class="text-primary-custom fw-bold text-uppercase small">{{ exp.periodo }}</span>
+                            <h4 class="fw-bold mb-0 text-uppercase mt-1">{{ exp.cargo }}</h4>
+                            <h5 class="text-secondary small fw-bold mb-3">{{ exp.empresa }}</h5>
+                        </div>
+                        
+                        {# BOTÃO DE EDIÇÃO SÓ PARA O ADMIN #}
+                        {% if session.get('admin_logado') %}
+                        <a href="{{ url_for('admin.editar_experiencia', id=exp.id) }}" class="btn btn-sm btn-outline-warning border-0">
+                            <i class="bi bi-pencil-square fs-5"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-muted mb-3">{{ exp.resumo }}</p>
+
+                    {# LISTA DE CONQUISTAS/DETALHES #}
+                    {% if exp.conquistas %}
+                    <ul class="list-unstyled small">
+                        {% for conquista in exp.conquistas %}
+                        <li class="mb-2 d-flex align-items-start text-secondary">
+                            <i class="bi bi-check2-circle text-primary-custom me-2 mt-1"></i>
+                            <span>{{ conquista }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-lg-4">
+                
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold text-uppercase mb-4 border-bottom pb-2">
+                            <i class="bi bi-cpu me-2 text-primary-custom"></i>Hard Skills
+                        </h3>
+                        
+                        {% for cat in habilidades %}
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-uppercase x-small text-secondary mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                {{ cat.NomeCategoria }}
+                            </h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                {% for item in cat.Itens.split(', ') %}
+                                <span class="badge rounded-pill bg-white text-dark border border-2 border-light-subtle px-3 py-2 shadow-xs" style="font-size: 0.75rem;">
+                                    {{ item }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm bg-dark text-white mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold text-uppercase mb-4 border-bottom border-secondary pb-2">
+                            <i class="bi bi-mortarboard me-2 text-warning"></i>Formação Acadêmica
+                        </h3>
+                        {% for f in formacao %}
+                        <div class="mb-4">
+                            <div class="fw-bold text-uppercase text-warning small">{{ f.curso }}</div>
+                            <div class="text-white x-small">{{ f.instituicao }}</div>
+                            <div class="text-white-50 x-small" style="font-size: 0.7rem;">{{ f.periodo }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <h3 class="h5 fw-bold text-uppercase mb-4 border-bottom pb-2 text-start">
+                            <i class="bi bi-patch-check me-2 text-primary-custom"></i>Certificações
+                        </h3>
+                        <div class="row g-3">
+                            {% for c in certificados %}
+                            <div class="col-6">
+                                <a href="{{ c.LinkVerificacao }}" target="_blank" class="text-decoration-none" title="{{ c.Nome }}">
+                                    <div class="p-2 border rounded bg-light hover-shadow transition-all">
+                                        <i class="bi {{ c.IconeClass }} fs-3 text-primary-custom"></i>
+                                        <div class="x-small text-dark fw-bold mt-1" style="font-size: 0.6rem;">{{ c.Instituicao }}</div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .text-primary-custom { color: #ff8c00 !important; }
+    .bg-primary-custom { background-color: #ff8c00 !important; }
+    .x-small { font-size: 0.85rem; }
+    .transition-all { transition: all 0.3s ease; }
+    .hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+</style>
+{% endblock %}
