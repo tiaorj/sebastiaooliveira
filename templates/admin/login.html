@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px;">
+        <div class="card-header bg-primary-custom text-dark text-center py-4">
+            <h4 class="fw-bold mb-0 text-uppercase">Direct<span style="color: #ff8c00;">I</span> Admin</h4>
+        </div>
+        <div class="card-body p-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} small">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-uppercase">Usuário</label>
+                    <input type="text" name="usuario" class="form-control border-0 bg-light" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-uppercase">Senha</label>
+                    <input type="password" name="senha" class="form-control border-0 bg-light" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold py-2" style="background-color: var(--directi-blue);">
+                    ACESSAR PAINEL
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

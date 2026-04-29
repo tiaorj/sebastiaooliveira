@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <form method="POST" class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-primary-custom text-dark p-4">
+                    <h3 class="fw-bold mb-0 text-uppercase">Editar Experiência Profissional</h3>
+                </div>
+                <div class="card-body p-5">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-uppercase small">Empresa</label>
+                        <select name="empresa_id" class="form-select" required>
+                            {% for emp in empresas %}
+                            <option value="{{ emp.EmpresaId }}" {% if emp.EmpresaId == exp.EmpresaId %}selected{% endif %}>
+                                {{ emp.NomeEmpresa }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-uppercase small">Cargo</label>
+                        <input type="text" name="cargo" class="form-control" value="{{ exp.Cargo }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-uppercase small">Resumo</label>
+                        <textarea name="resumo_curto" class="form-control" rows="3">{{ exp.ResumoCurto }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold text-uppercase small">Início</label>
+                            <input type="date" name="data_inicio" class="form-control" 
+                                value="{{ exp.DataInicio[:10] if exp.DataInicio is string else exp.DataInicio.strftime('%Y-%m-%d') if exp.DataInicio else '' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold text-uppercase small">Fim</label>
+                            <input type="date" name="data_fim" class="form-control" 
+                                value="{{ exp.DataFim[:10] if exp.DataFim is string else exp.DataFim.strftime('%Y-%m-%d') if exp.DataFim else '' }}">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3 fw-bold">SALVAR EXPERIÊNCIA</button>
+                </div>
+            </div>
+
+            <div class="card shadow border-0">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-uppercase">Conquistas & Detalhes</span>
+                    <button type="button" class="btn btn-sm btn-light fw-bold" data-bs-toggle="modal" data-bs-target="#modalAddConquista">
+                        + ADICIONAR
+                    </button>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for d in detalhes %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                            <span class="small text-secondary">{{ d.DescricaoConquista }}</span>
+                            <a href="{{ url_for('admin.excluir_conquista', detalhe_id=d.ExperienciaDetalheId, exp_id=exp.ExperienciaId) }}" 
+                            class="btn btn-sm btn-outline-danger border-0" 
+                            onclick="return confirm('Deseja excluir esta conquista?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="list-group-item text-muted small">Nenhuma conquista cadastrada.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="modalAddConquista" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form action="{{ url_for('admin.adicionar_conquista', exp_id=exp.ExperienciaId) }}" method="POST">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold text-uppercase" style="font-size: 0.9rem;">Nova Conquista</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">DESCRIÇÃO DA REALIZAÇÃO</label>
+                        <textarea name="descricao_conquista" class="form-control" rows="3" placeholder="Ex: Liderança técnica na migração de dados..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                    <button type="submit" class="btn btn-sm btn-primary px-4">SALVAR CONQUISTA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

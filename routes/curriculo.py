@@ -15,7 +15,10 @@ def sobre():
                FORMAT(E.DataInicio, 'MM/yyyy') + ' - ' + ISNULL(FORMAT(E.DataFim, 'MM/yyyy'), 'Atual') as Periodo
         FROM ExperienciaProfissional E
         JOIN Empresa Em ON E.EmpresaId = Em.EmpresaId
-        ORDER BY E.DataFim
+        ORDER BY 
+            CASE WHEN E.DataFim IS NULL THEN 0 ELSE 1 END, -- NULL ganha peso 0 (vem primeiro)
+            E.DataFim DESC,                               -- Depois, as datas mais recentes
+    E.DataInicio DESC;
     """)
     exps_raw = cursor.fetchall()
 
@@ -31,7 +34,7 @@ def sobre():
     experiencias = []
     for exp in exps_raw:
         experiencias.append({
-            'empresa': exp.NomeEmpresa, 'cargo': exp.Cargo, 'periodo': exp.Periodo,
+            'id': exp.ExperienciaId, 'empresa': exp.NomeEmpresa, 'cargo': exp.Cargo, 'periodo': exp.Periodo,
             'resumo_curto': exp.ResumoCurto, 'detalhes': detalhes_map.get(exp.ExperienciaId, [])
         })
 

@@ -2,8 +2,21 @@ from flask import Flask
 from flask_mail import Mail
 from routes.empresa import empresa_bp
 from routes.curriculo import curriculo_bp
+from routes.admin import admin_bp  # 1. Importe o blueprint
+from datetime import datetime
 
 app = Flask(__name__)
+
+@app.template_filter('formatar_data')
+def formatar_data(value, formato='%d/%m/%Y'):
+    if not value:
+        return ""
+    # Se já for um objeto date/datetime do Python (o pyodbc costuma retornar assim)
+    if hasattr(value, 'strftime'):
+        return value.strftime(formato)
+    return value
+
+app.register_blueprint(admin_bp)
 
 app.secret_key = 'chave_secreta_super_protegida_da_directi'
 

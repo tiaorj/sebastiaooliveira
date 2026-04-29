@@ -31,7 +31,11 @@
             <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                 <div class="flex-grow-1">
                     <h3 class="fw-bold text-uppercase mb-0">{{ exp.cargo }}</h3>
-                    
+{% if session.get('admin_logado') %}
+        <a href="{{ url_for('admin.editar_experiencia', id=exp.id) }}" class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil"></i> EDITAR
+        </a>
+    {% endif %}             
                     <div class="h4 fw-bold text-secondary mb-3 text-uppercase">
                         {{ exp.empresa }}
                     </div>
