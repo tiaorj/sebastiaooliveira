@@ -9,8 +9,15 @@ from routes.projetos import projetos_bp
 from routes.habilidades import habilidades_bp
 from routes.certificacoes import certificacoes_bp
 from routes.experiencias import experiencias_bp
+import os
+from dotenv import load_dotenv
+from flask import render_template
+
+load_dotenv()
 
 app = Flask(__name__)
+
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'chave-padrao-muito-fraca')
 
 @app.template_filter('formatar_data')
 def formatar_data(value, formato='%d/%m/%Y'):
@@ -27,8 +34,6 @@ app.register_blueprint(projetos_bp)
 app.register_blueprint(habilidades_bp)
 app.register_blueprint(certificacoes_bp)
 app.register_blueprint(experiencias_bp)
-
-app.secret_key = 'chave_secreta_super_protegida_da_directi'
 
 # CONFIGURAÇÃO DE E-MAIL (Exemplo Gmail)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -65,6 +70,15 @@ def inject_info():
 # Registro dos módulos (Blueprints)
 app.register_blueprint(empresa_bp)   # Cuida da Home (/)
 app.register_blueprint(curriculo_bp)  # Cuida do Sobre (/sobre)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    # Aqui você pode enviar um log ou e-mail para si mesmo avisando do erro
+    return render_template('errors/500.html'), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

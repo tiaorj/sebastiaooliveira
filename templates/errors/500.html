@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="display-1 fw-bold text-danger">500</h1>
+            <h2 class="fw-bold text-uppercase">Erro Interno do Servidor</h2>
+            <p class="text-muted mb-4">
+                Desculpe, algo deu errado do nosso lado. Já fomos notificados e estamos trabalhando para resolver. 
+                Tente atualizar a página em alguns instantes.
+            </p>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2 fw-bold">
+                TENTAR NOVAMENTE
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

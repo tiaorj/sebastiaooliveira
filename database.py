@@ -1,27 +1,32 @@
+import os
 import pyodbc
 import platform
+from dotenv import load_dotenv
+
 
 def get_db_connection():
+    load_dotenv()
+
     # Detecta se está no Render (Linux) ou Local (Windows)
     if platform.system() != 'Windows':
         driver = '{ODBC Driver 17 for SQL Server}'
     else:
         driver = '{SQL Server}'
-        
-    # Adicionamos "Login Timeout" para dar mais tempo na conexão
-    conn_str = (
-        f"Driver={driver};"
-        "Server=DIRECTTI.mssql.somee.com;"
-        "Database=DIRECTTI;"
-        "UID=tiaorj_SQLLogin_1;"
-        "PWD=8z3h6dedem;"
-        "Connection Timeout=30;" # Dá 30 segundos para o servidor responder
-        "TrustServerCertificate=yes;"
-    )
 
-    try:
-        return pyodbc.connect(conn_str)
-    except pyodbc.Error as e:
-        # Se falhar aqui, ele vai imprimir o erro exato no console
-        print(f"Erro de Conexão: {e}")
-        raise e
+
+    
+    server = os.getenv('DB_SERVER')
+    database = os.getenv('DB_DATABASE')
+    
+    if not server or not database:
+        raise ValueError("ERRO: As variáveis de ambiente não foram carregadas do arquivo .env")
+
+    conn_str = (
+        f"DRIVER={driver};"
+        f"SERVER={server};"
+        f"DATABASE={database};"
+        f"UID={os.getenv('DB_USERNAME')};"
+        f"PWD={os.getenv('DB_PASSWORD')};"
+        f"Connection Timeout=30;" # Dá mais tempo para o SQL responder
+    )
+    return pyodbc.connect(conn_str)
