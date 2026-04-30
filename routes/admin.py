@@ -76,7 +76,7 @@ def editar_experiencia(id):
         conn.commit()
         conn.close()
         flash('Experiência e empresa atualizadas!', 'success')
-        return redirect(url_for('curriculo.sobre'))
+        return redirect(url_for('curriculo.especialista'))
 
     # BUSCA DADOS DA EXPERIÊNCIA
     cursor.execute("SELECT * FROM ExperienciaProfissional WHERE ExperienciaId = ?", (id,))

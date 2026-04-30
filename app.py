@@ -7,6 +7,8 @@ from datetime import datetime
 from routes.dashboard import dashboard_bp
 from routes.projetos import projetos_bp
 from routes.habilidades import habilidades_bp
+from routes.certificacoes import certificacoes_bp
+from routes.experiencias import experiencias_bp
 
 app = Flask(__name__)
 
@@ -23,6 +25,8 @@ app.register_blueprint(admin_bp)
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(projetos_bp)
 app.register_blueprint(habilidades_bp)
+app.register_blueprint(certificacoes_bp)
+app.register_blueprint(experiencias_bp)
 
 app.secret_key = 'chave_secreta_super_protegida_da_directi'
 

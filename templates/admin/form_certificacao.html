@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <h2 class="fw-bold text-uppercase mb-4">
+                {% if certificado %} Editar {% else %} Nova {% endif %} 
+                <span class="text-primary-custom">Certificação</span>
+            </h2>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">NOME DA CERTIFICAÇÃO</label>
+                            <input type="text" name="nome" class="form-control" value="{{ certificado.Nome if certificado else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">INSTITUIÇÃO</label>
+                            <input type="text" name="instituicao" class="form-control" value="{{ certificado.Instituicao if certificado else '' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">ÍCONE VISUAL</label>
+                            <select name="icone" class="form-select">
+                                <option value="bi-patch-check" {% if certificado and certificado.IconeClass == 'bi-patch-check' %}selected{% endif %}>Oficial (Selo)</option>
+                                <option value="bi-award" {% if certificado and certificado.IconeClass == 'bi-award' %}selected{% endif %}>Prêmio / Honra</option>
+                                <option value="bi-mortarboard" {% if certificado and certificado.IconeClass == 'bi-mortarboard' %}selected{% endif %}>Acadêmico</option>
+                                <option value="bi-shield-check" {% if certificado and certificado.IconeClass == 'bi-shield-check' %}selected{% endif %}>Segurança / Cloud</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">LINK DE VERIFICAÇÃO (URL)</label>
+                            <input type="url" name="link" class="form-control" value="{{ certificado.LinkVerificacao if certificado else '' }}" placeholder="https://...">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-3">SALVAR CERTIFICAÇÃO</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

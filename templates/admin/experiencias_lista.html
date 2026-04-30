@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-uppercase">Gestão de <span class="text-primary-custom">Trajetória</span></h2>
+        <a href="{{ url_for('experiencias_admin.form') }}" class="btn btn-primary-custom fw-bold">
+            <i class="bi bi-plus-lg"></i> NOVA EXPERIÊNCIA
+        </a>
+    </div>
+
+    <!-- Mensagens de Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm border-0" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>PERÍODO</th>
+                    <th>EMPRESA / CARGO</th>
+                    <th class="text-center">AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in experiencias %}
+                <tr>
+                    <td style="width: 200px;">
+                        <span class="badge bg-light text-dark border">{{ e.Inicio }} - {{ e.Fim }}</span>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-uppercase" style="letter-spacing: 0.5px;">{{ e.Cargo }}</div>
+                        <small class="text-primary-custom fw-bold">{{ e.NomeEmpresa }}</small>
+                    </td>
+                    <td class="text-center" style="width: 150px;">
+                        <a href="{{ url_for('experiencias_admin.form', id=e.ExperienciaId) }}" class="btn btn-sm btn-outline-primary border-0" title="Editar">
+                            <i class="bi bi-pencil-square fs-5"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-danger border-0" title="Excluir (Opcional)">
+                            <i class="bi bi-trash fs-5"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">
+                        Nenhuma experiência cadastrada. Clique em "Nova Experiência" para começar.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ url_for('dashboard.index') }}" class="text-secondary small text-decoration-none">
+            <i class="bi bi-arrow-left"></i> Voltar ao Painel
+        </a>
+    </div>
+</div>
+{% endblock %}
