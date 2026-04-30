@@ -1,6 +1,5 @@
 import re
 import unicodedata
-
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from database import get_db_connection
 from routes.admin import login_required
@@ -9,11 +8,8 @@ from datetime import datetime
 experiencias_bp = Blueprint('experiencias_admin', __name__, url_prefix='/admin/experiencias')
 
 def slugify(text):
-    # Remove acentos
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
-    # Remove caracteres especiais e transforma em minúsculo
     text = re.sub(r'[^\w\s-]', '', text).strip().lower()
-    # Substitui espaços e hifens por underscores (conforme o padrão que vi no seu print)
     return re.sub(r'[-\s]+', '_', text)
 
 @experiencias_bp.route('/')
@@ -41,17 +37,14 @@ def form(id):
     cursor = conn.cursor()
 
     if request.method == 'POST':
-        # 1. Captura de dados (Usando o nome correto 'resumo_curto')
         nome_empresa = request.form.get('nome_empresa').strip()
         cargo = request.form.get('cargo')
-        resumo = request.form.get('resumo_curto') # Sincronizado com o HTML
+        resumo = request.form.get('resumo_curto')
         data_inicio = request.form.get('data_inicio')
         data_fim = request.form.get('data_fim') or None
-        
-        # Pega a lista de conquistas vindas do form dinâmico
         conquistas_enviadas = request.form.getlist('conquistas[]')
 
-        # 2. Lógica de Empresa (com Slug automático)
+        # Busca ou Cria EmpresaId (Lógica unificada para Select ou Input)[cite: 2]
         cursor.execute("SELECT EmpresaId FROM Empresa WHERE NomeEmpresa = ?", (nome_empresa,))
         row_empresa = cursor.fetchone()
 
@@ -63,7 +56,6 @@ def form(id):
                            (nome_empresa, novo_slug))
             empresa_id = cursor.fetchone()[0]
 
-        # 3. Salvar Experiência
         if id:
             cursor.execute("""
                 UPDATE ExperienciaProfissional 
@@ -71,7 +63,6 @@ def form(id):
                 WHERE ExperienciaId=?
             """, (empresa_id, cargo, resumo, data_inicio, data_fim, id))
             exp_id = id
-            # Limpa conquistas antigas para sobrescrever com a nova lista
             cursor.execute("DELETE FROM ExperienciaDetalhe WHERE ExperienciaId = ?", (id,))
         else:
             cursor.execute("""
@@ -81,7 +72,6 @@ def form(id):
             """, (empresa_id, cargo, resumo, data_inicio, data_fim))
             exp_id = cursor.fetchone()[0]
 
-        # 4. Salvar as Conquistas
         for desc in conquistas_enviadas:
             if desc.strip():
                 cursor.execute("INSERT INTO ExperienciaDetalhe (ExperienciaId, DescricaoConquista) VALUES (?, ?)", 
@@ -89,12 +79,11 @@ def form(id):
 
         conn.commit()
         conn.close()
-        flash('Experiência e detalhes salvos!', 'success')
+        flash('Experiência salva com sucesso!', 'success')
         return redirect(url_for('experiencias_admin.lista'))
 
-    # GET: Preparar dados para a tela
+    # GET: Preparação dos dados para o formulário
     cursor.execute("SELECT NomeEmpresa FROM Empresa ORDER BY NomeEmpresa")
-    # Pegamos apenas o nome (index 0) para não vir como tupla (id, nome) no HTML
     empresas = [row[0] for row in cursor.fetchall()]
     
     exp = None
@@ -103,59 +92,63 @@ def form(id):
     
     if id:
         cursor.execute("""
-            SELECT E.*, Em.NomeEmpresa 
+            SELECT E.Cargo, E.ResumoCurto, E.DataInicio, E.DataFim, Em.NomeEmpresa 
             FROM ExperienciaProfissional E 
             JOIN Empresa Em ON E.EmpresaId = Em.EmpresaId 
             WHERE E.ExperienciaId = ?
         """, (id,))
-        exp = cursor.fetchone()
-        if exp:
-            nome_empresa_atual = exp.NomeEmpresa
+        row = cursor.fetchone()
+        if row:
+            exp = {
+                'Cargo': row[0],
+                'ResumoCurto': row[1],
+                'DataInicio': row[2],
+                'DataFim': row[3]
+            }
+            nome_empresa_atual = row[4] # Texto limpo para a Combo[cite: 2]
+            
             cursor.execute("SELECT DescricaoConquista FROM ExperienciaDetalhe WHERE ExperienciaId = ?", (id,))
-            detalhes = [d[0] for d in cursor.fetchall()]
+            detalhes = [r[0] for r in cursor.fetchall()]
 
     conn.close()
     return render_template('admin/form_experiencia.html', 
-                           exp=exp, empresas=empresas, detalhes=detalhes, nome_empresa_atual=nome_empresa_atual)
+                       exp=exp, empresas=empresas, detalhes=detalhes, nome_empresa_atual=nome_empresa_atual)
 
 @experiencias_bp.route('/trajetoria')
 def trajetoria_publica():
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+    # Ordenação: Projetos atuais (DataFim NULL) no topo[cite: 2]
     cursor.execute("""
         SELECT E.*, Em.NomeEmpresa 
         FROM ExperienciaProfissional E 
         JOIN Empresa Em ON E.EmpresaId = Em.EmpresaId 
-        ORDER BY E.DataInicio DESC
+        ORDER BY 
+            CASE WHEN E.DataFim IS NULL THEN 0 ELSE 1 END, 
+            E.DataFim DESC, 
+            E.DataInicio DESC
     """)
     experiencias_raw = cursor.fetchall()
     
     experiencias = []
     for exp in experiencias_raw:
         cursor.execute("SELECT DescricaoConquista FROM ExperienciaDetalhe WHERE ExperienciaId = ?", (exp.ExperienciaId,))
-        detalhes = [d[0] for d in cursor.fetchall()]
+        conquistas = [d[0] for d in cursor.fetchall()]
         
-        # --- TRATAMENTO DE DATAS (O PULO DO GATO) ---
-        inicio = exp.DataInicio
-        fim = exp.DataFim
-
-        # Se vier do banco como String, convertemos para Datetime
-        if isinstance(inicio, str):
-            inicio = datetime.strptime(inicio[:10], '%Y-%m-%d')
-        
-        if isinstance(fim, str) and fim:
-            fim = datetime.strptime(fim[:10], '%Y-%m-%d')
-        # --------------------------------------------
+        # Tratamento de datas para o template Jinja
+        inicio = datetime.strptime(exp.DataInicio[:10], '%Y-%m-%d') if isinstance(exp.DataInicio, str) else exp.DataInicio
+        fim = None
+        if exp.DataFim:
+            fim = datetime.strptime(exp.DataFim[:10], '%Y-%m-%d') if isinstance(exp.DataFim, str) else exp.DataFim
 
         experiencias.append({
+            'ExperienciaId': exp.ExperienciaId,
             'Cargo': exp.Cargo,
             'Empresa': exp.NomeEmpresa,
             'Resumo': exp.ResumoCurto,
-            'Inicio': inicio, # Agora é garantido que é Datetime
+            'Inicio': inicio,
             'Fim': fim,
-            'Conquistas': detalhes
+            'Conquistas': conquistas
         })
-        
     conn.close()
     return render_template('trajetoria.html', experiencias=experiencias)

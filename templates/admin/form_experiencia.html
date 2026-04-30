@@ -11,20 +11,31 @@
                 <a href="{{ url_for('experiencias_admin.lista') }}" class="btn btn-sm btn-outline-secondary">VOLTAR</a>
             </div>
 
-            <form method="POST" id="mainForm">
+            <form method="POST">
                 <div class="card shadow border-0 mb-4">
                     <div class="card-body p-4">
-                        <!-- CAMPO EMPRESA COM DATALIST (VALOR PRÉ-PREENCHIDO) -->
+                        
                         <div class="mb-3">
                             <label class="form-label fw-bold text-uppercase small">Empresa</label>
-                            <input type="text" name="nome_empresa" list="empresas-list" class="form-control" 
-                                   placeholder="Digite ou selecione a empresa..." 
-                                   value="{{ nome_empresa_atual }}" required autocomplete="off">
-                            <datalist id="empresas-list">
+                            
+                            {% if exp %}
+                            <!-- MODO EDIÇÃO: COMBO (SELECT) -->
+                            <select name="nome_empresa" class="form-select" required>
+                                <option value="">Selecione a empresa...</option>
                                 {% for nome in empresas %}
-                                <option value="{{ nome }}">
+                                <option value="{{ nome.empresa_id }}" {% if nome.nome_empresa == nome_empresa_atual %}selected{% endif %}>
+                                    {{ nome.NomeEmpresa }}
+                                </option>
                                 {% endfor %}
-                            </datalist>
+                            </select>
+                            <div class="form-text text-muted">No modo edição, selecione uma empresa existente.</div>
+                            
+                            {% else %}
+                            <!-- MODO NOVO: CAMPO DE TEXTO -->
+                            <input type="text" name="nome_empresa" class="form-control" 
+                                placeholder="Digite o nome da nova empresa..." required autocomplete="off">
+                            <div class="form-text text-muted">Digite o nome para cadastrar uma nova empresa.</div>
+                            {% endif %}
                         </div>
 
                         <div class="mb-3">
@@ -32,28 +43,27 @@
                             <input type="text" name="cargo" class="form-control" value="{{ exp.Cargo if exp else '' }}" required>
                         </div>
 
-                        <!-- CAMPO RESUMO (CORRIGIDO PARA resumo_curto) -->
                         <div class="mb-3">
                             <label class="form-label fw-bold text-uppercase small">Resumo da Atuação</label>
-                            <textarea name="resumo_curto" class="form-control" rows="3" placeholder="Resumo breve...">{{ exp.ResumoCurto if exp and exp.ResumoCurto else '' }}</textarea>
+                            <textarea name="resumo_curto" class="form-control" rows="3">{{ exp.ResumoCurto if exp else '' }}</textarea>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold text-uppercase small">Início</label>
                                 <input type="date" name="data_inicio" class="form-control" 
-                                    value="{{ exp.DataInicio[:10] if exp and exp.DataInicio is string else exp.DataInicio.strftime('%Y-%m-%d') if exp and exp.DataInicio else '' }}" required>
+                                    value="{{ exp.DataInicio.strftime('%Y-%m-%d') if exp and exp.DataInicio and not exp.DataInicio is string else exp.DataInicio if exp and exp.DataInicio is string else '' }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold text-uppercase small">Fim</label>
                                 <input type="date" name="data_fim" class="form-control" 
-                                    value="{{ exp.DataFim[:10] if exp and exp.DataFim is string else exp.DataFim.strftime('%Y-%m-%d') if exp and exp.DataFim else '' }}">
+                                    value="{{ exp.DataFim.strftime('%Y-%m-%d') if exp and exp.DataFim and not exp.DataFim is string else exp.DataFim if exp and exp.DataFim is string else '' }}">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- SEÇÃO DE CONQUISTAS DINÂMICA (SALVA TUDO JUNTO) -->
+                <!-- SEÇÃO DE CONQUISTAS (DINÂMICA) -->
                 <div class="card shadow border-0 mb-4">
                     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                         <span class="fw-bold text-uppercase small">Conquistas & Detalhes</span>
@@ -69,7 +79,6 @@
                             </div>
                             {% endfor %}
                             
-                            <!-- Sempre inicia com uma linha vazia se for novo -->
                             {% if not detalhes %}
                             <div class="input-group mb-2">
                                 <span class="input-group-text bg-light text-primary-custom"><i class="bi bi-check2-circle"></i></span>
@@ -78,7 +87,6 @@
                             </div>
                             {% endif %}
                         </div>
-                        <p class="text-muted x-small mt-2 italic">* Você pode adicionar quantas linhas desejar antes de salvar.</p>
                     </div>
                 </div>
 
