@@ -3,10 +3,14 @@
     --directi-blue: #003366;
     --directi-orange: #ff8c00;
     
-    /* Nova Paleta Profissional para o Currículo (Substituindo Terracota) */
+    /* Nova Paleta Profissional para o Currï¿½culo (Substituindo Terracota) */
     --resume-primary: #002D5B;  /* Azul Oxford Profissional */
-    --resume-accent: #0056b3;   /* Azul Royal para links e ícones */
-    --resume-bg-light: #F8F9FA; /* Fundo cinza gelo para seções */
+    --resume-accent: #0056b3;   /* Azul Royal para links e ï¿½cones */
+    --resume-bg-light: #F8F9FA; /* Fundo cinza gelo para seï¿½ï¿½es */
+
+    --timeline-line-color: #dee2e6;
+    --timeline-dot-bg: #ffffff;
+    --timeline-spacing: 3rem;
 }
 
 body {
@@ -26,7 +30,7 @@ body {
         display: block !important;
     }
     .content-scroll {
-        margin-left: 17rem; /* Empurra o conteúdo para a direita */
+        margin-left: 17rem; /* Empurra o conteï¿½do para a direita */
     }
     .navbar-toggler { display: none; }
 }
@@ -46,7 +50,7 @@ body {
     }
 }
 
-/* Estilos de Texto e Ícones */
+/* Estilos de Texto e ï¿½cones */
 .text-primary-custom { 
     color: var(--resume-accent) !important; /* Destaque em Azul Royal */
 }
@@ -62,11 +66,11 @@ body {
     background-color: rgba(255,255,255,0.05); /* Leve destaque no hover */
 }
 
-/* Ajuste das Listas Dinâmicas */
+/* Ajuste das Listas Dinï¿½micas */
 .resume-section {
     padding: 3rem 1.5rem;
     max-width: 900px;
-    border-bottom: 1px solid #e9ecef; /* Linhas divisórias mais sutis e limpas */
+    border-bottom: 1px solid #e9ecef; /* Linhas divisï¿½rias mais sutis e limpas */
 }
 .section-title { 
     color: #2c3e50; 
@@ -79,7 +83,7 @@ body {
     
 }
 
-/* Estilo para os ícones de habilidades no novo padrão */
+/* Estilo para os ï¿½cones de habilidades no novo padrï¿½o */
 .dev-icons i {
     color: var(--resume-accent);
     margin-right: 15px;
@@ -89,3 +93,163 @@ body {
 .dev-icons i:hover {
     transform: scale(1.1);
 }
+
+
+  .trajetoria-container {
+        background-color: #fff;
+        padding: 60px 0;
+        overflow: hidden;
+    }
+
+    .timeline-wrapper {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* LINHA CENTRAL */
+    .timeline-wrapper::before {
+        content: "";
+        position: absolute;
+        width: 4px;
+        background-color: #333;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+    }
+
+    /* LINHA/ROW DA TIMELINE */
+    .timeline-row {
+        display: flex;
+        width: 100%;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* COLUNAS LADO A LADO */
+    .side {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .left-side {
+        justify-content: flex-end; /* Alinha tudo para a direita (em direÃ§Ã£o Ã  linha) */
+        padding-right: 0;
+    }
+
+    .right-side {
+        justify-content: flex-start; /* Alinha tudo para a esquerda (em direÃ§Ã£o Ã  linha) */
+        padding-left: 0;
+    }
+
+    /* MARCADOR NA LINHA CENTRAL */
+    .line-marker {
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border: 4px solid #333;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+    }
+
+    /* PONTINHOS (....... ) */
+    .dots {
+        font-size: 40px;
+        letter-spacing: 2px;
+        color: #333;
+        font-weight: bold;
+        line-height: 0;
+        margin-top: -10px;
+        user-select: none;
+        width: 80px;
+        text-align: center;
+    }
+
+    /* BALÃƒO DA DATA */
+    .date-balloon {
+        width: 100px;
+        height: 100px;
+        min-width: 100px;
+        border-radius: 50%;
+        background: #fff;
+        border: 7px solid #f44556;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 800;
+        color: #f44556;
+        position: relative;
+        z-index: 5;
+        box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    /* SETA DO BALÃƒO (Ponteiro para os pontos) */
+    .date-balloon::after {
+        content: "";
+        position: absolute;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Seta para a DIREITA (itens na esquerda) */
+    .left-side .date-balloon::after {
+        border-left: 15px solid #f44556;
+        right: -15px;
+    }
+
+    /* Seta para a ESQUERDA (itens na direita) */
+    .right-side .date-balloon::after {
+        border-right: 15px solid #f44556;
+        left: -15px;
+    }
+
+    /* CONTEÃšDO DE TEXTO */
+    .text-content {
+        max-width: 350px;
+        padding: 0 20px;
+    }
+
+    .left-side .text-content { text-align: right; }
+    .right-side .text-content { text-align: left; }
+
+    .title-job { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; margin: 0; }
+    .company-name { font-weight: 700; color: #333; display: block; margin: 2px 0; font-size: 0.9rem; }
+    .desc-short { font-size: 0.85rem; color: #666; line-height: 1.4; margin: 0; }
+
+    /* CICLO DE CORES */
+    .color-1 .date-balloon { border-color: #f44556; color: #f44556; }
+    .color-1 .date-balloon::after { border-left-color: #f44556; border-right-color: #f44556; }
+    .color-1 .title-job { color: #f44556; }
+
+    .color-2 .date-balloon { border-color: #1ebad0; color: #1ebad0; }
+    .color-2 .date-balloon::after { border-left-color: #1ebad0; border-right-color: #1ebad0; }
+    .color-2 .title-job { color: #1ebad0; }
+
+    .color-3 .date-balloon { border-color: #7cba01; color: #7cba01; }
+    .color-3 .date-balloon::after { border-left-color: #7cba01; border-right-color: #7cba01; }
+    .color-3 .title-job { color: #7cba01; }
+
+    .color-4 .date-balloon { border-color: #f8781f; color: #f8781f; }
+    .color-4 .date-balloon::after { border-left-color: #f8781f; border-right-color: #f8781f; }
+    .color-4 .title-job { color: #f8781f; }
+
+    @media (max-width: 768px) {
+        .timeline-wrapper::before, .dots, .line-marker, .date-balloon::after { display: none; }
+        .timeline-row { flex-direction: column; align-items: center; margin-bottom: 40px; }
+        .side { width: 100%; justify-content: center ! durability; padding: 0; }
+        .left-side .text-content, .right-side .text-content { text-align: center; }
+        .date-balloon { margin-bottom: 10px; }
+    }

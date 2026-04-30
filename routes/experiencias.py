@@ -4,6 +4,7 @@ import unicodedata
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from database import get_db_connection
 from routes.admin import login_required
+from datetime import datetime
 
 experiencias_bp = Blueprint('experiencias_admin', __name__, url_prefix='/admin/experiencias')
 
@@ -116,3 +117,45 @@ def form(id):
     conn.close()
     return render_template('admin/form_experiencia.html', 
                            exp=exp, empresas=empresas, detalhes=detalhes, nome_empresa_atual=nome_empresa_atual)
+
+@experiencias_bp.route('/trajetoria')
+def trajetoria_publica():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        SELECT E.*, Em.NomeEmpresa 
+        FROM ExperienciaProfissional E 
+        JOIN Empresa Em ON E.EmpresaId = Em.EmpresaId 
+        ORDER BY E.DataInicio DESC
+    """)
+    experiencias_raw = cursor.fetchall()
+    
+    experiencias = []
+    for exp in experiencias_raw:
+        cursor.execute("SELECT DescricaoConquista FROM ExperienciaDetalhe WHERE ExperienciaId = ?", (exp.ExperienciaId,))
+        detalhes = [d[0] for d in cursor.fetchall()]
+        
+        # --- TRATAMENTO DE DATAS (O PULO DO GATO) ---
+        inicio = exp.DataInicio
+        fim = exp.DataFim
+
+        # Se vier do banco como String, convertemos para Datetime
+        if isinstance(inicio, str):
+            inicio = datetime.strptime(inicio[:10], '%Y-%m-%d')
+        
+        if isinstance(fim, str) and fim:
+            fim = datetime.strptime(fim[:10], '%Y-%m-%d')
+        # --------------------------------------------
+
+        experiencias.append({
+            'Cargo': exp.Cargo,
+            'Empresa': exp.NomeEmpresa,
+            'Resumo': exp.ResumoCurto,
+            'Inicio': inicio, # Agora é garantido que é Datetime
+            'Fim': fim,
+            'Conquistas': detalhes
+        })
+        
+    conn.close()
+    return render_template('trajetoria.html', experiencias=experiencias)

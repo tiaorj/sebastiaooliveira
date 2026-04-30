@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="trajetoria-container">
+    <div class="container">
+        <h2 class="text-center fw-bold text-uppercase mb-5">Linha do <span class="text-primary-custom">Tempo</span></h2>
+
+        <div class="timeline-wrapper">
+            {% for exp in experiencias %}
+            {% set color_class = "color-" ~ ((loop.index0 % 4) + 1) %}
+            
+            <div class="timeline-row {{ color_class }}">
+                <!-- LADO ESQUERDO -->
+                <div class="side left-side">
+                    {% if loop.index is odd %}
+                    <div class="text-content">
+                        <h3 class="title-job">{{ exp.Cargo }}</h3>
+                        <span class="company-name">{{ exp.Empresa }}</span>
+                        <p class="desc-short">{{ exp.Resumo[:120] }}...</p>
+                        <button class="btn btn-link btn-sm p-0 text-decoration-none fw-bold mt-1" 
+                                data-bs-toggle="modal" data-bs-target="#modal{{ exp.ExperienciaId }}">[ detalhes ]</button>
+                    </div>
+                    <div class="date-balloon">
+                        <span>{{ exp.Inicio.strftime('%Y') }}<br>{{ exp.Fim.strftime('%Y') if exp.Fim else 'presente' }}</span>
+                    </div>
+                    <div class="dots">......</div>
+                    {% endif %}
+                </div>
+
+                <div class="line-marker"></div>
+
+                <!-- LADO DIREITO -->
+                <div class="side right-side">
+                    {% if loop.index is even %}
+                    <div class="dots">......</div>
+                    <div class="date-balloon">
+                        <span>{{ exp.Inicio.strftime('%Y') }}<br>{{ exp.Fim.strftime('%Y') if exp.Fim else 'presente' }}</span>
+                    </div>
+                    <div class="text-content">
+                        <h3 class="title-job">{{ exp.Cargo }}</h3>
+                        <span class="company-name">{{ exp.Empresa }}</span>
+                        <p class="desc-short">{{ exp.Resumo[:120] }}...</p>
+                        <button class="btn btn-link btn-sm p-0 text-decoration-none fw-bold mt-1" 
+                                data-bs-toggle="modal" data-bs-target="#modal{{ exp.ExperienciaId }}">[ detalhes ]</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- MODAL (Mantido igual) -->
+            <div class="modal fade" id="modal{{ exp.ExperienciaId }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content border-0">
+                        <div class="modal-header bg-dark text-white">
+                            <h5 class="modal-title fw-bold">{{ exp.Cargo }} | {{ exp.Empresa }}</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <p>{{ exp.Resumo }}</p>
+                            <hr>
+                            <h6 class="fw-bold text-uppercase small">Principais Entregas:</h6>
+                            <ul class="list-unstyled">
+                                {% for c in exp.Conquistas %}
+                                <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> {{ c }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
