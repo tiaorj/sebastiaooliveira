@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold text-uppercase mb-4">Gestão de <span class="text-primary-custom">Habilidades</span></h2>
+
+    <!-- CARD DE CADASTRO RÁPIDO -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-3 small text-uppercase text-secondary">Adicionar Nova Skill</h5>
+            <form action="{{ url_for('habilidades_admin.adicionar') }}" method="POST" class="row g-3">
+                <div class="col-md-4">
+                    <select name="categoria_id" class="form-select" required>
+                        <option value="" selected disabled>Escolha a Categoria...</option>
+                        {% for cat in categorias %}
+                        <option value="{{ cat.HabilidadeCategoriaId }}">{{ cat.NomeCategoria }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="descricao" class="form-control" placeholder="Ex: Apache Spark, Power BI, Python..." required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary-custom w-100 fw-bold">ADICIONAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- LISTAGEM -->
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover bg-white align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>CATEGORIA</th>
+                    <th>HABILIDADE</th>
+                    <th class="text-center">AÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in habilidades %}
+                <tr>
+                    <td><span class="badge bg-dark">{{ h.NomeCategoria }}</span></td>
+                    <td class="fw-bold">{{ h.Descricao }}</td>
+                    <td class="text-center">
+                        <a href="{{ url_for('habilidades_admin.excluir', id=h.HabilidadeId) }}" 
+                           class="btn btn-sm btn-outline-danger border-0"
+                           onclick="return confirm('Remover esta habilidade?')">
+                            <i class="bi bi-trash3"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

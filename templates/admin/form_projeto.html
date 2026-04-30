@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Cabeçalho Dinâmico -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-uppercase">
+                    {% if projeto %}
+                        Editar <span class="text-primary-custom">Projeto</span>
+                    {% else %}
+                        Novo <span class="text-primary-custom">Projeto</span>
+                    {% endif %}
+                </h2>
+                <a href="{{ url_for('projetos_admin.lista') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> VOLTAR
+                </a>
+            </div>
+
+            <!-- Card do Formulário -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="row g-3">
+                            <!-- Título e Ordem -->
+                            <div class="col-md-9">
+                                <label class="form-label small fw-bold text-uppercase">Título do Projeto</label>
+                                <input type="text" name="titulo" class="form-control" value="{{ projeto.Titulo if projeto else '' }}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-uppercase">Ordem</label>
+                                <input type="number" disabled name="ordem" class="form-control" value="{{ projeto.OrdemExibicao if projeto else 0 }}">
+                            </div>
+
+                            <!-- Tecnologias e Ícone -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-uppercase">Tecnologias</label>
+                                <input type="text" name="tecnologias" class="form-control" value="{{ projeto.Tecnologias if projeto else '' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-uppercase">Estilo do Ícone (Visual)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light" id="icon-preview">
+                                        <i class="bi {{ projeto.IconeClass if projeto else 'bi-code-square' }}"></i>
+                                    </span>
+                                    <select name="icone" class="form-select" id="icon-select" onchange="updateIconPreview(this.value)">
+                                        <option value="bi-code-slash" {% if projeto and projeto.IconeClass == 'bi-code-slash' %}selected{% endif %}>💻 Desenvolvimento (Geral)</option>
+                                        <option value="bi-database" {% if projeto and projeto.IconeClass == 'bi-database' %}selected{% endif %}>🗄️ Banco de Dados / Engenharia</option>
+                                        <option value="bi-diagram-3" {% if projeto and projeto.IconeClass == 'bi-diagram-3' %}selected{% endif %}>🏗️ Arquitetura de Software</option>
+                                        <option value="bi-bar-chart" {% if projeto and projeto.IconeClass == 'bi-bar-chart' %}selected{% endif %}>📊 Business Intelligence</option>
+                                        <option value="bi-lightning-charge" {% if projeto and projeto.IconeClass == 'bi-lightning-charge' %}selected{% endif %}>⚡ Performance Tuning</option>
+                                        <option value="bi-shield-lock" {% if projeto and projeto.IconeClass == 'bi-shield-lock' %}selected{% endif %}>🔒 Segurança / Modernização</option>
+                                        <option value="bi-cloud-arrow-up" {% if projeto and projeto.IconeClass == 'bi-cloud-arrow-up' %}selected{% endif %}>☁️ Cloud / DevOps</option>
+                                        <option value="bi-gear" {% if projeto and projeto.IconeClass == 'bi-gear' %}selected{% endif %}>⚙️ Automação / Engenharia</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- LINKS (Novos campos conectados ao banco) -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-uppercase">Link GitHub</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-github"></i></span>
+                                    <input type="url" name="link_github" class="form-control" value="{{ projeto.LinkGitHub if projeto else '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-uppercase">Link Live/Demo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                                    <input type="url" name="link_live" class="form-control" value="{{ projeto.LinkLive if projeto else '' }}">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-uppercase">Descrição</label>
+                                <textarea name="descricao" class="form-control" rows="4" required>{{ projeto.Descricao if projeto else '' }}</textarea>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-3">SALVAR PROJETO</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Script rápido para atualizar o ícone ao lado na hora -->
+<script>
+function updateIconPreview(val) {
+    const preview = document.getElementById('icon-preview');
+    preview.innerHTML = `<i class="bi ${val}"></i>`;
+}
+</script>
+{% endblock %}

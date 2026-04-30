@@ -2,9 +2,11 @@ from flask import Flask
 from flask_mail import Mail
 from routes.empresa import empresa_bp
 from routes.curriculo import curriculo_bp
-from routes.admin import admin_bp  # 1. Importe o blueprint
+from routes.admin import admin_bp 
 from datetime import datetime
 from routes.dashboard import dashboard_bp
+from routes.projetos import projetos_bp
+from routes.habilidades import habilidades_bp
 
 app = Flask(__name__)
 
@@ -19,6 +21,8 @@ def formatar_data(value, formato='%d/%m/%Y'):
 
 app.register_blueprint(admin_bp)
 app.register_blueprint(dashboard_bp)
+app.register_blueprint(projetos_bp)
+app.register_blueprint(habilidades_bp)
 
 app.secret_key = 'chave_secreta_super_protegida_da_directi'
 

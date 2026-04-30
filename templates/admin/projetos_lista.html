@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-uppercase">Gestão de <span class="text-primary-custom">Projetos</span></h2>
+        <a href="{{ url_for('projetos_admin.form') }}" class="btn btn-primary-custom fw-bold">+ NOVO PROJETO</a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>PROJETO</th>
+                    <th>TECNOLOGIAS</th>
+                    <th class="text-center">AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in projetos %}
+                <tr>
+                    <td>
+                        <div class="fw-bold">{{ p.NomeProjeto }}</div>
+                        <small class="text-muted">{{ p.Descricao[:80] }}...</small>
+                    </td>
+                    <td><span class="badge bg-light text-dark border">{{ p.Tecnologias }}</span></td>
+                    <td class="text-center">
+                        <a href="{{ url_for('projetos_admin.form', id=p.ProjetoId) }}" class="btn btn-sm btn-outline-primary border-0">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="{{ url_for('projetos_admin.excluir', id=p.ProjetoId) }}" 
+                           class="btn btn-sm btn-outline-danger border-0"
+                           onclick="return confirm('Excluir este projeto?')">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-3">
+        <a href="{{ url_for('dashboard.index') }}" class="text-decoration-none text-secondary small">
+            <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
