@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-uppercase">Gerenciar <span class="text-primary-custom">Formação Acadêmica</span></h2>
+        <a href="{{ url_for('formacao_admin.form') }}" class="btn btn-success fw-bold">+ ADICIONAR</a>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Instituição</th>
+                        <th>Curso</th>
+                        <th>Nível</th>
+                        <th class="text-center">Período</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in formacoes %}
+                    <tr>
+                        <td class="fw-bold">{{ f.NomeInstituicao }}</td>
+                        <td>{{ f.NomeCurso }}</td>
+                        <td><span class="badge bg-primary">{{ f.NivelEscolaridade }}</span></td>
+                        <td class="text-center">{{ f.AnoInicio }} - {{ f.AnoConclusao if f.AnoConclusao else 'Atual' }}</td>
+                        <td class="text-center">
+                            <a href="{{ url_for('formacao_admin.form', id=f.FormacaoAcademicaId) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

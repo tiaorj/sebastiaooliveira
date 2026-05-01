@@ -12,74 +12,125 @@
         </a>
     </div>
 
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white shadow-sm border-0 h-100">
+    <div class="row g-3 mb-5">
+    <!-- Total Experiências -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm border-start border-primary border-4 h-100">
                 <div class="card-body d-flex align-items-center justify-content-between p-4">
                     <div>
-                        <h6 class="text-uppercase mb-1" style="opacity: 0.8;">Experiências</h6>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-1">Experiências</h6>
                         <h2 class="fw-bold mb-0">{{ total_exp }}</h2>
                     </div>
-                    <i class="bi bi-briefcase fs-1 opacity-50"></i>
+                    <div class="bg-primary bg-opacity-10 p-3 rounded">
+                        <i class="bi bi-briefcase text-primary fs-3"></i>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card bg-dark text-white shadow-sm border-0 h-100">
+        <!-- Total Projetos -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm border-start border-success border-4 h-100">
                 <div class="card-body d-flex align-items-center justify-content-between p-4">
                     <div>
-                        <h6 class="text-uppercase mb-1" style="opacity: 0.8;">Projetos</h6>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-1">Projetos</h6>
                         <h2 class="fw-bold mb-0">{{ total_proj }}</h2>
                     </div>
-                    <i class="bi bi-code-slash fs-1 opacity-50"></i>
+                    <div class="bg-success bg-opacity-10 p-3 rounded">
+                        <i class="bi bi-code-slash text-success fs-3"></i>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card bg-warning text-dark shadow-sm border-0 h-100">
+        
+        <!-- Total Formações -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm border-start border-info border-4 h-100">
                 <div class="card-body d-flex align-items-center justify-content-between p-4">
                     <div>
-                        <h6 class="text-uppercase mb-1 fw-bold" style="opacity: 0.8;">Certificações</h6>
-                        <h2 class="fw-bold mb-0">{{ total_cert }}</h2>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-1">Formações</h6>
+                        <h2 class="fw-bold mb-0">{{ total_form }}</h2>
                     </div>
-                    <i class="bi bi-patch-check fs-1 opacity-50"></i>
+                    <div class="bg-info bg-opacity-10 p-3 rounded">
+                        <i class="bi bi-mortarboard text-info fs-3"></i>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Total Certificações -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm border-start border-warning border-4 h-100">
+                <div class="card-body d-flex align-items-center justify-content-between p-4">
+                    <div>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-1">Certificados</h6>
+                        <h2 class="fw-bold mb-0">{{ total_cert }}</h2>
+                    </div>
+                    <div class="bg-warning bg-opacity-10 p-3 rounded">
+                        <i class="bi bi-patch-check text-warning fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>        
     </div>
 
     <h3 class="fw-bold text-uppercase mb-4 h5">Gestão de Conteúdo</h3>
-    <div class="row g-3">
-        <div class="col-md-3">
-            <a href="{{ url_for('curriculo.especialista') }}" class="btn btn-light border w-100 py-4 shadow-sm hover-card">
-                <i class="bi bi-person-lines-fill fs-3 text-primary-custom d-block mb-2"></i>
-                <span class="fw-bold text-uppercase small">Currículo / Especialista</span>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{url_for('projetos_admin.lista')}}" class="btn btn-light border w-100 py-4 shadow-sm hover-card">
-                <i class="bi bi-kanban fs-3 text-primary-custom d-block mb-2"></i>
-                <span class="fw-bold text-uppercase small">Projetos</span>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="#" class="btn btn-light border w-100 py-4 shadow-sm hover-card">
-                <i class="bi bi-mortarboard fs-3 text-primary-custom d-block mb-2"></i>
-                <span class="fw-bold text-uppercase small">Formação</span>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="{{ url_for('habilidades_admin.lista') }}" class="btn btn-light border w-100 py-4 shadow-sm hover-card">
-                <i class="bi bi-lightning-charge fs-3 text-primary-custom d-block mb-2"></i>
-                <span class="fw-bold text-uppercase small">Habilidades</span>
-            </a>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center p-4 border-start border-primary border-4">
+                <i class="bi bi-briefcase fs-1 text-primary mb-3"></i>
+                <h4 class="fw-bold text-uppercase">Experiências</h4>
+                <p class="text-muted small">Gerencie sua trajetória profissional e cargos anteriores.</p>
+                <a href="{{ url_for('experiencias_admin.lista') }}" class="btn btn-outline-primary w-100 mt-auto fw-bold">
+                    ACESSAR
+                </a>
+            </div>
+        </div>       
+        <!-- Projetos e Portfólio -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center p-4 border-start border-success border-4">
+                <i class="bi bi-code-square fs-1 text-success mb-3"></i>
+                <h4 class="fw-bold text-uppercase">Projetos</h4>
+                <p class="text-muted small">Vitrine de projetos, tecnologias utilizadas e links externos.</p>
+                <a href="{{ url_for('projetos_admin.lista') }}" class="btn btn-outline-success w-100 mt-auto fw-bold">
+                    ACESSAR
+                </a>
+            </div>
         </div>
 
-        <div class="col-md-3">
-            <a href="{{ url_for('certificacoes_admin.lista') }}" class="btn btn-light border w-100 py-4 shadow-sm hover-card">
-                <i class="bi bi-patch-check fs-3 text-primary-custom d-block mb-2"></i>
-                <span class="fw-bold text-uppercase">Gerir Certificações</span>
-            </a>
+        <!-- Formação Acadêmica -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center p-4 border-start border-info border-4">
+                <i class="bi bi-mortarboard fs-1 text-info mb-3"></i>
+                <h4 class="fw-bold text-uppercase">Formação</h4>
+                <p class="text-muted small">Histórico acadêmico, graduações e cursos técnicos.</p>
+                <a href="{{ url_for('formacao_admin.lista') }}" class="btn btn-outline-info w-100 mt-auto fw-bold">
+                    ACESSAR
+                </a>
+            </div>
+        </div>     
+    
+        <!-- Habilidades Técnicas (Skills) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center p-4 border-start border-warning border-4">
+                <i class="bi bi-lightning-charge fs-1 text-warning mb-3"></i>
+                <h4 class="fw-bold text-uppercase">Habilidades</h4>
+                <p class="text-muted small">Gerencie suas stacks (Python, SQL Server, Flask, etc).</p>
+                <a href="{{ url_for('habilidades_admin.lista') }}" class="btn btn-outline-warning w-100 mt-auto fw-bold">
+                    ACESSAR
+                </a>
+            </div>
+        </div>
+                    
+        <!-- Certificações -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center p-4 border-start border-danger border-4">
+                <i class="bi bi-patch-check fs-1 text-danger mb-3"></i>
+                <h4 class="fw-bold text-uppercase">Certificações</h4>
+                <p class="text-muted small">Certificados de cursos, Microsoft, AWS e outros.</p>
+                <a href="{{ url_for('certificacoes_admin.lista') }}" class="btn btn-outline-danger w-100 mt-auto fw-bold">
+                    ACESSAR
+                </a>
+            </div>
         </div>        
     </div>
 </main>

@@ -17,6 +17,9 @@ def index():
     cursor.execute("SELECT COUNT(*) FROM Projeto")
     total_proj = cursor.fetchone()[0]
 
+    cursor.execute("SELECT COUNT(*) FROM FormacaoAcademica")
+    total_form = cursor.fetchone()[0]
+
     cursor.execute("SELECT COUNT(*) FROM Certificacoes")
     total_cert = cursor.fetchone()[0]
 
@@ -30,4 +33,5 @@ def index():
                            total_exp=total_exp, 
                            total_proj=total_proj, 
                            total_cert=total_cert,
+                           total_form=total_form,
                            atividades=ultimas_atividades)

@@ -12,6 +12,7 @@ from routes.experiencias import experiencias_bp
 import os
 from dotenv import load_dotenv
 from flask import render_template
+from routes.formacao import formacao_bp
 
 load_dotenv()
 
@@ -34,6 +35,7 @@ app.register_blueprint(projetos_bp)
 app.register_blueprint(habilidades_bp)
 app.register_blueprint(certificacoes_bp)
 app.register_blueprint(experiencias_bp)
+app.register_blueprint(formacao_bp)
 
 # CONFIGURAÇÃO DE E-MAIL (Exemplo Gmail)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'

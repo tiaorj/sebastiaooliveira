@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold mb-4">{% if formacao %}EDITAR{% else %}NOVA{% endif %} FORMAÇÃO</h2>
+            <form method="POST" class="card shadow p-4 border-0">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Instituição</label>
+                    <input type="text" name="nome_instituicao" class="form-control" value="{{ formacao.NomeInstituicao if formacao else '' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nome do Curso</label>
+                    <input type="text" name="nome_curso" class="form-control" value="{{ formacao.NomeCurso if formacao else '' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nível de Escolaridade</label>
+                    <input type="text" name="nivel_escolaridade" class="form-control" placeholder="Ex: Graduação, Tecnólogo, Especialização" value="{{ formacao.NivelEscolaridade if formacao else '' }}">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Ano Início</label>
+                        <input type="number" name="ano_inicio" class="form-control" value="{{ formacao.AnoInicio if formacao else '' }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Ano Conclusão</label>
+                        <input type="text" name="ano_conclusao" class="form-control" placeholder="Ex: 2024 ou Cursando" value="{{ formacao.AnoConclusao if formacao else '' }}">
+                    </div>
+                </div>
+
+                <div class="d-grid mt-3">
+                    <button type="submit" class="btn btn-primary-custom py-2 fw-bold">SALVAR REGISTRO</button>
+                    <a href="{{ url_for('formacao_admin.lista') }}" class="btn btn-link text-muted mt-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
