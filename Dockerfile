@@ -1,38 +1,37 @@
-# 1. Imagem base estável
-FROM python:3.10-slim
+# Usa uma imagem oficial do Python
+FROM python:3.11-slim
 
-# 2. Instala dependências básicas do sistema e certificados
-# O erro 127 ocorre muitas vezes porque 'curl' ou 'gnupg2' não estão presentes no shell
+# Evita interrupções por prompts de configuração
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 2. Instala apenas o necessário para baixar a chave e o driver
 RUN apt-get update && apt-get install -y \
-    ca-certificates \
     curl \
-    gnupg2 \
+    gnupg \
+    ca-certificates \
     && apt-get clean
 
-# 3. Adiciona a chave oficial da Microsoft para o repositório de pacotes
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+# 3. Baixa a chave da Microsoft e converte para o formato de keyring (substitui o apt-key)
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
 
-# 4. Adiciona o repositório do Microsoft ODBC Driver 17 para Debian 11 (Bullseye)
-RUN curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
+# 4. Adiciona o repositório usando a chave específica criada acima
+RUN echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/debian/11/prod bullseye main" > /etc/apt/sources.list.d/mssql-release.list
 
-# 5. Instala o Driver ODBC e ferramentas de desenvolvimento para o pyodbc
-# ACCEPT_EULA=Y é obrigatório para aceitar os termos da Microsoft automaticamente
+# 5. Instala o Driver ODBC 17 e dependências do pyodbc
 RUN apt-get update && ACCEPT_EULA=Y apt-get install -y \
     msodbcsql17 \
     unixodbc-dev \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
-# 6. Define o diretório de trabalho no container
+# 6. Configuração do ambiente de trabalho
 WORKDIR /app
 
-# 7. Copia apenas o requirements primeiro para aproveitar o cache do Docker
-# Isso acelera os próximos deploys se as bibliotecas não mudarem
+# 7. Instalação das dependências Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 8. Copia todo o restante do código do projeto para o container
+# 8. Copia o código fonte[cite: 1]
 COPY . .
 
-# 9. Comando de execução usando Gunicorn (Padrão para Render/Produção)
-# O bind na porta 10000 é o padrão do Render para Web Services
+# 9. Inicialização com Gunicorn para o Render
 CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
