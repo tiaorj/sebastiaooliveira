@@ -1,9 +1,21 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 from database import get_db_connection
 from routes.admin import login_required
+from contextlib import contextmanager
 
 dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/admin')
 
+@contextmanager
+def get_db_cursor():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        yield cursor
+        conn.commit()
+    finally:
+        cursor.close()
+        conn.close()
+        
 @dashboard_bp.route('/dashboard')
 @login_required
 def index():

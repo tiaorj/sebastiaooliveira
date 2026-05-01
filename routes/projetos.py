@@ -1,72 +1,72 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from database import get_db_connection
+from database import get_db_cursor
 from routes.admin import login_required
 
 projetos_bp = Blueprint('projetos_admin', __name__, url_prefix='/admin/projetos')
 
-# LISTAGEM DE PROJETOS
+# Rota Pública (Para o seu Portfólio)
+@projetos_bp.route('/publico')
+def lista_publica():
+    with get_db_cursor() as cursor:
+        cursor.execute("SELECT * FROM Projeto ORDER BY OrdemExibicao ASC")
+        projetos = cursor.fetchall()
+    return render_template('projetos.html', projetos=projetos)
+
+# Lista Administrativa
 @projetos_bp.route('/')
 @login_required
 def lista():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Projeto ORDER BY ProjetoId DESC")
-    projetos = cursor.fetchall()
-    conn.close()
+    with get_db_cursor() as cursor:
+        cursor.execute("SELECT * FROM Projeto ORDER BY OrdemExibicao ASC")
+        projetos = cursor.fetchall()
     return render_template('admin/projetos_lista.html', projetos=projetos)
+    
 
 # ADICIONAR / EDITAR PROJETO
 @projetos_bp.route('/form', defaults={'id': None}, methods=['GET', 'POST'])
 @projetos_bp.route('/form/<int:id>', methods=['GET', 'POST'])
 @login_required
-def form(id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
+def form(id):    
     if request.method == 'POST':
-        titulo = request.form.get('titulo')
-        tecnologias = request.form.get('tecnologias')
-        descricao = request.form.get('descricao')
-        icone = request.form.get('icone')
-        ordem = request.form.get('ordem') or 0
-        link_git = request.form.get('link_github') # NOVO
-        link_live = request.form.get('link_live')   # NOVO
+        dados = (
+            request.form.get('titulo'),
+            request.form.get('tecnologias'),
+            request.form.get('descricao'),
+            request.form.get('icone'),
+            request.form.get('ordem') or 0,
+            request.form.get('link_github'),
+            request.form.get('link_live')
+        )
 
-        if id:
-            # No UPDATE, mantemos a ordem que já existe (ou permitimos editar)
-            ordem = request.form.get('ordem')
-            cursor.execute("""
-                UPDATE Projeto SET Titulo=?, Tecnologias=?, Descricao=?, IconeClass=?, OrdemExibicao=?, LinkGitHub=?, LinkLive=?
-                WHERE ProjetoId=?
-            """, (titulo, tecnologias, descricao, icone, ordem, link_git, link_live, id))
-        else:
-            # No INSERT, a ordem é automática: MAX + 1
-            cursor.execute("""
-                INSERT INTO Projeto (Titulo, Tecnologias, Descricao, IconeClass, OrdemExibicao, LinkGitHub, LinkLive)
-                VALUES (?, ?, ?, ?, (SELECT ISNULL(MAX(OrdemExibicao), 0) + 1 FROM Projeto), ?, ?)
-            """, (titulo, tecnologias, descricao, icone, link_git, link_live))
+        with get_db_cursor() as cursor:
+            if id:
+                cursor.execute("""
+                    UPDATE Projeto SET Titulo=?, Tecnologias=?, Descricao=?, IconeClass=?, OrdemExibicao=?, LinkGitHub=?, LinkLive=?
+                    WHERE ProjetoId=?
+                """, (*dados, id))
+            else:
+                cursor.execute("""
+                    INSERT INTO Projeto (Titulo, Tecnologias, Descricao, IconeClass, OrdemExibicao, LinkGitHub, LinkLive)
+                    VALUES (?, ?, ?, ?, (SELECT ISNULL(MAX(OrdemExibicao), 0) + 1 FROM Projeto), ?, ?)
+                """, (dados))
+
             flash('Projeto cadastrado com sucesso!', 'success')
-        
-        conn.commit()
-        conn.close()
-        return redirect(url_for('projetos_admin.lista'))
+            return redirect(url_for('projetos_admin.lista'))
 
     projeto = None
     if id:
-        cursor.execute("SELECT * FROM Projeto WHERE ProjetoId = ?", (id,))
-        projeto = cursor.fetchone()
+        with get_db_cursor() as cursor:
+            cursor.execute("SELECT * FROM Projeto WHERE ProjetoId = ?", (id,))
+            projeto = cursor.fetchone()
     
-    conn.close()
     return render_template('admin/form_projeto.html', projeto=projeto)
 
 # EXCLUIR PROJETO
 @projetos_bp.route('/excluir/<int:id>')
 @login_required
 def excluir(id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM Projeto WHERE ProjetoId = ?", (id,))
-    conn.commit()
-    conn.close()
-    flash('Projeto removido.', 'danger')
+    with get_db_cursor() as cursor:
+        cursor.execute("DELETE FROM Projeto WHERE ProjetoId = ?", (id,))
+        projetos = cursor.fetchall()
+        flash('Projeto removido.', 'danger')
     return redirect(url_for('projetos_admin.lista'))

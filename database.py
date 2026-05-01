@@ -1,32 +1,30 @@
-import os
 import pyodbc
-import platform
-from dotenv import load_dotenv
-
+from contextlib import contextmanager
+from config import Config
 
 def get_db_connection():
-    load_dotenv()
-
-    # Detecta se está no Render (Linux) ou Local (Windows)
-    if platform.system() != 'Windows':
-        driver = '{ODBC Driver 17 for SQL Server}'
-    else:
-        driver = '{SQL Server}'
-
-
-    
-    server = os.getenv('DB_SERVER')
-    database = os.getenv('DB_DATABASE')
-    
-    if not server or not database:
-        raise ValueError("ERRO: As variáveis de ambiente não foram carregadas do arquivo .env")
-
     conn_str = (
-        f"DRIVER={driver};"
-        f"SERVER={server};"
-        f"DATABASE={database};"
-        f"UID={os.getenv('DB_USERNAME')};"
-        f"PWD={os.getenv('DB_PASSWORD')};"
-        f"Connection Timeout=30;" # Dá mais tempo para o SQL responder
+        f"DRIVER={Config.DB_DRIVER};"
+        f"SERVER={Config.DB_SERVER};"
+        f"DATABASE={Config.DB_DATABASE};"
+        f"UID={Config.DB_USERNAME};"
+        f"PWD={Config.DB_PASSWORD};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=yes;"
     )
     return pyodbc.connect(conn_str)
+
+@contextmanager
+def get_db_cursor():
+    """Gerencia a abertura e fechamento automático da conexão e do cursor."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        yield cursor
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        cursor.close()
+        conn.close()

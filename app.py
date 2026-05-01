@@ -13,12 +13,21 @@ import os
 from dotenv import load_dotenv
 from flask import render_template
 from routes.formacao import formacao_bp
+from config import Config
 
 load_dotenv()
 
 app = Flask(__name__)
 
+@app.template_filter('split_techs')
+def split_techs(value):
+    if not value:
+        return []
+    return [t.strip() for t in value.split(',')]
+
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'chave-padrao-muito-fraca')
+
+app.config.from_object(Config)
 
 @app.template_filter('formatar_data')
 def formatar_data(value, formato='%d/%m/%Y'):
@@ -82,5 +91,16 @@ def internal_server_error(e):
     # Aqui você pode enviar um log ou e-mail para si mesmo avisando do erro
     return render_template('errors/500.html'), 500
 
+@app.template_filter('split_techs')
+def split_techs(value):
+    if not value: return []
+    return [t.strip() for t in value.split(',')]
+
+with app.app_context():
+    print("\n--- ROTAS REGISTRADAS ---")
+    for rule in app.url_map.iter_rules():
+        print(f"Rota: {rule.endpoint} | Caminho: {rule}")
+    print("-------------------------\n")
+    
 if __name__ == "__main__":
     app.run(debug=True)

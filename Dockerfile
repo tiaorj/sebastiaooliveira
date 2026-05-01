@@ -1,29 +1,22 @@
-# Usando a vers„o est·vel do Python
-FROM python:3.11-bullseye
+FROM python:3.10-slim
 
-# Instala dependÍncias b·sicas e o Driver da Microsoft
+# Instala depend√™ncias do sistema e o Driver ODBC da Microsoft para SQL Server
 RUN apt-get update && apt-get install -y \
-    curl \
-    apt-transport-https \
-    gnupg2 \
+    curl gnupg2 \
     && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
-    && apt-get install -y unixodbc-dev \
-    && apt-get clean
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copia e instala as bibliotecas Python
+# Copia e instala depend√™ncias Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia o restante do cÛdigo
+# Copia o restante do c√≥digo
 COPY . .
 
-# Expıe a porta do Render
-EXPOSE 10000
-
-# Executa com Gunicorn
+# Comando de inicializa√ß√£o para produ√ß√£o
 CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
