@@ -7,6 +7,12 @@
             <h1 class="display-5 fw-bold text-uppercase">Painel <span class="text-primary-custom">Controle</span></h1>
             <p class="text-muted">Bem-vindo, <strong>{{ session.usuario_nome }}</strong>. O que vamos atualizar hoje?</p>
         </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            
+            <a href="{{ url_for('curriculo.gerar_pdf') }}" class="btn btn-danger fw-bold shadow-sm">
+                <i class="bi bi-file-earmark-pdf me-2"></i> BAIXAR CURRÍCULO PDF
+            </a>
+        </div>           
         <a href="{{ url_for('admin.logout') }}" class="btn btn-outline-danger btn-sm fw-bold">
             <i class="bi bi-box-arrow-right"></i> LOGOUT
         </a>

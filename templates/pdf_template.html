@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- OBRIGATÓRIO PARA ACENTOS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        @page { size: A4; margin: 0; }
+        body { font-family: Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 0; font-size: 11pt; }
+        
+        .container { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        
+        /* Ajuste de largura: Sidebar 30%, Conteúdo 70% */
+        .sidebar { width: 30%; background-color: #fcfcfc; padding: 30px 15px; border-right: 1px solid #ddd; vertical-align: top; }
+        .main-content { width: 70%; padding: 30px; vertical-align: top; }
+
+        .profile-img { width: 120px; height: 120px; margin-bottom: 15px; }
+        .name { color: #8b5e3c; font-size: 20pt; font-weight: bold; margin-bottom: 5px; }
+        .role { color: #666; font-size: 11pt; margin-bottom: 25px; }
+
+        .section-header { font-size: 14pt; font-weight: bold; border-bottom: 1px solid #8b5e3c; margin: 20px 0 10px 0; padding-bottom: 3px; text-transform: uppercase; }
+        
+        /* TABELAS INTERNAS PARA ALINHAMENTO */
+        .item-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .item-date { width: 25%; vertical-align: top; font-size: 9pt; font-weight: bold; color: #555; }
+        .item-desc { width: 75%; vertical-align: top; font-size: 10pt; }
+        
+        .bold { font-weight: bold; color: #000; }
+        .sidebar-text { font-size: 9pt; text-align: justify; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <table class="container">
+        <tr>
+            <td class="sidebar">
+                <img src="static/img/minha-foto.jpg" class="profile-img">
+                <div class="name">Sebastião Oliveira</div>
+                <div class="role">Analista de Sistemas Sênior</div>
+
+                <div class="section-header" style="font-size: 11pt;">Resumo</div>
+                <div class="sidebar-text">
+                    Analista de Sistemas Sênior e Arquiteto com +20 anos de experiência. 
+                    Especialista em modernização de sistemas legados e performance de banco de dados.
+                </div>
+
+                <div class="section-header" style="font-size: 11pt;">Contato</div>
+                <div class="sidebar-text">
+                    <strong>📍 Rio de Janeiro - RJ</strong><br>
+                    <strong>📧 {{ 'tiaorj@gmail.com' }}</strong><br>
+                    <strong>🔗 linkedin.com/in/sebastiao</strong>
+                </div>
+            </td>
+
+            <td class="main-content">
+                <div class="section-header">Formação</div>
+                {% for form in formacao %}
+                <table class="item-table">
+                    <tr>
+                        <td><div class="bold">{{ form.instituicao }}</div>
+                            {{ form.periodo }}                            
+                        </td>
+                        <td class="item-desc">
+                            <div class="bold">{{ form.NomeCursoAbreviado }}</div>
+                            
+                            <div>{{ form.Descricao }}</div>
+                        </td>
+                    </tr>
+                </table>
+                {% endfor %}
+
+                <div class="section-header">Experiência</div>
+                {% for exp in experiencias %}
+                <table class="item-table">
+                    <tr>
+                        <td class="item-date">
+                            <div class="bold">{{ exp.empresa }}</div>
+                            {{ exp.periodo }} 
+                            
+                        </td>
+                        <td class="item-desc">
+                            <div class="bold">{{ exp.cargo }}</div>                            
+                            <div style="color: #666; font-size: 9pt;">
+                                <ul>
+                                    {% for conquista in exp.conquistas %}
+                                        <li>{{ conquista }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

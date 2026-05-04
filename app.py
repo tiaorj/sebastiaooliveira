@@ -29,14 +29,15 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'chave-padrao-muito-fraca')
 
 app.config.from_object(Config)
 
-@app.template_filter('formatar_data')
-def formatar_data(value, formato='%d/%m/%Y'):
-    if not value:
-        return ""
-    # Se já for um objeto date/datetime do Python (o pyodbc costuma retornar assim)
-    if hasattr(value, 'strftime'):
-        return value.strftime(formato)
-    return value
+@app.template_filter('formata_data')
+def formata_data(value):
+    if not value: return "Atual"
+    try:
+        # Se for string do SQL Server, tentamos converter
+        return value.strftime('%m/%Y')
+    except:
+        # Se já for string ou falhar, retorna o que for possível
+        return str(value)[:10]
 
 app.register_blueprint(admin_bp)
 app.register_blueprint(dashboard_bp)

@@ -253,3 +253,51 @@ body {
         .left-side .text-content, .right-side .text-content { text-align: center; }
         .date-balloon { margin-bottom: 10px; }
     }
+
+    /* Efeito de elevação e transição nos cards */
+.card-portfolio {
+    transition: all 0.3s ease-in-out;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.card-portfolio:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12) !important;
+}
+
+/* Container do ícone com fundo suave */
+.icon-shape {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+/* Tags de Tecnologia (Pills customizadas) */
+.tech-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 50px;
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    display: inline-block;
+    margin-bottom: 5px;
+    transition: all 0.2s;
+}
+
+.tech-tag:hover {
+    background-color: #e9ecef;
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Linha lateral de cor para cada categoria */
+.border-left-primary { border-left: 5px solid #0d6efd !important; }
+.border-left-success { border-left: 5px solid #198754 !important; }
+.border-left-info    { border-left: 5px solid #0dcaf0 !important; }

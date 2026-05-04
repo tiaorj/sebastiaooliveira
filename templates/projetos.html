@@ -7,26 +7,44 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for p in projetos %}
         <div class="col">
-            <div class="card h-100 shadow-sm border-0">
+            <div class="card h-100 shadow-sm border-0 card-portfolio border-left-primary">
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="{{ p.IconeClass if p.IconeClass else 'bi bi-code-slash' }} fs-3 text-primary me-2"></i>
-                        <h5 class="card-title fw-bold mb-0">{{ p.Titulo }}</h5>
+                    <!-- Ícone e Título -->
+                    <div class="icon-shape bg-primary bg-opacity-10 text-primary">
+                        <i class="{{ p.IconeClass if p.IconeClass else 'bi bi-code-slash' }} fs-2"></i>
                     </div>
-                    <p class="card-text text-muted small">{{ p.Descricao }}</p>
-                    <div class="mt-3">
+                    
+                    <h5 class="fw-bold mb-2">{{ p.Titulo }}</h5>
+                    <p class="text-muted small mb-4" style="height: 60px; overflow: hidden;">
+                        {{ p.Descricao }}
+                    </p>
+
+                    <!-- Tags de Tecnologia -->
+                    <div class="mb-4">
                         {% for tech in p.Tecnologias|split_techs %}
-                            <span class="badge bg-light text-dark border me-1">{{ tech }}</span>
+                            <span class="tech-tag">{{ tech }}</span>
                         {% endfor %}
                     </div>
                 </div>
-                <div class="card-footer bg-transparent border-0 p-4 pt-0 d-flex gap-2">
-                    {% if p.LinkGitHub %}<a href="{{ p.LinkGitHub }}" class="btn btn-sm btn-dark w-100">GitHub</a>{% endif %}
-                    {% if p.LinkLive %}<a href="{{ p.LinkLive }}" class="btn btn-sm btn-primary w-100">Live</a>{% endif %}
+
+                <!-- Botões de Ação -->
+                <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                    <div class="d-flex gap-2">
+                        {% if p.LinkGitHub %}
+                            <a href="{{ p.LinkGitHub }}" target="_blank" class="btn btn-outline-dark btn-sm w-100 fw-bold">
+                                <i class="bi bi-github me-1"></i> CODE
+                            </a>
+                        {% endif %}
+                        {% if p.LinkLive %}
+                            <a href="{{ p.LinkLive }}" target="_blank" class="btn btn-primary btn-sm w-100 fw-bold">
+                                <i class="bi bi-eye me-1"></i> DEMO
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
-    </div>
+    </div>>
 </div>
 {% endblock %}
