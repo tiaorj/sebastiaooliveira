@@ -3,6 +3,7 @@ from database import get_db_connection
 from functools import wraps
 from werkzeug.security import check_password_hash # Importante para verificar a senha
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -29,7 +30,7 @@ def login():
         cursor.execute("SELECT UsuarioId, Nome, SenhaHash FROM Usuarios WHERE Username = ?", (username,))
         usuario = cursor.fetchone()
         
-        if usuario:
+        if usuario and check_password_hash(usuario.SenhaHash, senha_digitada):
             # Verifica se a senha digitada bate com o Hash do banco
             if check_password_hash(usuario.SenhaHash, senha_digitada):
                 session['admin_logado'] = True

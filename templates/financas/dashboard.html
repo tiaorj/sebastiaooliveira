@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark"><i class="bi bi-wallet2 me-2"></i>Controle Financeiro - {{ mes }}/{{ ano }}</h2>
+        <a href="{{ url_for('financas.adicionar_gasto') }}" class="btn btn-primary fw-bold shadow-sm">
+            <i class="bi bi-plus-lg me-1"></i> NOVO GASTO
+        </a>
+    </div>
+
+    <!-- CAIXA AZUL: RESUMO GERAL -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-info bg-opacity-10 text-info h-100 p-3">
+                <div class="small fw-bold text-uppercase">Rendas Reais</div>
+                <div class="h3 fw-bold mb-0">R$ {{ "{:,.2f}".format(renda) }}</div>
+                
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-danger bg-opacity-10 text-danger h-100 p-3">
+                <div class="small fw-bold text-uppercase">Contas a Pagar</div>
+                <div class="h3 fw-bold mb-0">R$ {{ "{:,.2f}".format(pendentes) }}</div>
+                <div class="small mt-2">Status: Pendente</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-success bg-opacity-10 text-success h-100 p-3">
+                <div class="small fw-bold text-uppercase">Saldo em Caixa</div>
+                <div class="h3 fw-bold mb-0">R$ {{ "{:,.2f}".format(saldo_total) }}</div>
+                <div class="small mt-2">Já descontado o pago</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-primary text-white h-100 p-3 shadow">
+                <div class="small fw-bold text-uppercase opacity-75">Sobra Prevista</div>
+                <div class="h3 fw-bold mb-0">R$ {{ "{:,.2f}".format(sobra) }}</div>
+                <div class="small mt-2 text-white-50">Líquido estimado</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtro de Período -->
+    <div class="card border-0 shadow-sm mb-4 bg-light">
+        <div class="card-body py-2">
+            <form id="formFiltro" method="GET" class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <span class="fw-bold text-muted small text-uppercase">Período:</span>
+                </div>
+                
+                <!-- Select de Meses -->
+                <div class="col-auto">
+                    <select name="mes" class="form-select form-select-sm" onchange="this.form.submit()">
+                        {% for num, nome in meses %}
+                            <option value="{{ num }}" {% if num == mes %}selected{% endif %}>
+                                {{ nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Select de Anos (Ano anterior e Atual) -->
+                <div class="col-auto">
+                    <select name="ano" class="form-select form-select-sm" onchange="this.form.submit()">
+                        {% for a in anos %}
+                            <option value="{{ a }}" {% if a == ano %}selected{% endif %}>
+                                {{ a }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-auto ms-auto">
+                    <a href="{{ url_for('financas.dashboard') }}" class="btn btn-sm btn-link text-decoration-none text-muted">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Resetar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>    
+    <!-- TABELA DE LANÇAMENTOS (ESTILO PLANILHA) -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Categoria</th>
+                        <th>Descrição</th>
+                        <th>Vencimento</th>
+                        <th class="text-end">Estimado</th>
+                        <th class="text-end">Real</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in lancamentos %}
+                    <tr>
+                        <td class="ps-4">
+                            <span class="badge rounded-pill" style="background-color: {{ l.CorHex }};">
+                                {{ l.CategoriaNome }}
+                            </span>
+                        </td>
+                        <td class="fw-bold">{{ l.Descricao }}</td>
+                        <td>{{ l.DataVencimento.strftime('%d/%m/%Y') }}</td>
+                        <td class="text-end text-muted">R$ {{ "{:,.2f}".format(l.ValorEstimado) }}</td>
+                        <td class="text-end" style="width: 150pt;">
+                            <div id="display-valor-{{ l.LancamentoId }}" 
+                                onclick="habilitarEdicao({{ l.LancamentoId }})"
+                                class="fw-bold cursor-pointer text-primary" 
+                                title="Clique para editar">
+                                R$ {{ "{:,.2f}".format(l.ValorReal if l.ValorReal else 0) }}
+                            </div>
+                            <!-- Input oculto que aparece apenas na edição -->
+                            <div id="edit-container-{{ l.LancamentoId }}" class="d-none">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" 
+                                        id="input-valor-{{ l.LancamentoId }}" 
+                                        class="form-control form-control-sm text-end" 
+                                        value="{{ "{:.2f}".format(l.ValorReal if l.ValorReal else 0) }}"
+                                        onkeyup="if(event.key === 'Enter') salvarValor({{ l.LancamentoId }})">
+                                    <button class="btn btn-success btn-sm" onclick="salvarValor({{ l.LancamentoId }})">
+                                        <i class="bi bi-check"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center" id="status-container-{{ l.LancamentoId }}">
+                            {% if l.Pago %}
+                                <span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>PAGO</span>
+                            {% else %}
+                                <button onclick="darBaixa({{ l.LancamentoId }})" class="btn btn-sm btn-outline-danger py-0 px-2 fw-bold">
+                                    <i class="bi bi-arrow-down-circle me-1"></i> BAIXAR
+                                </button>
+                            {% endif %}
+<button class="btn btn-sm text-danger p-1" onclick="deletarGasto({{ l.LancamentoId }})" title="Excluir">
+                <i class="bi bi-trash"></i>
+            </button>                            
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deletarGasto(id) {
+    if (!confirm("Excluir este lançamento permanentemente?")) return;
+
+    fetch(`/financas/deletar-gasto/${id}`, { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`linha-gasto-${id}`).style.display = 'none';
+            // Recarrega para atualizar a "Caixa Azul" com os novos totais
+            location.reload(); 
+        }
+    });
+    }
+function darBaixa(id) {
+    if (!confirm("Confirmar pagamento deste item?")) return;
+
+    fetch(`/financas/baixar-gasto/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Atualiza o visual da célula sem recarregar a página
+            const container = document.getElementById(`status-container-${id}`);
+            container.innerHTML = '<span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>PAGO</span>';
+            
+            // Opcional: Recarregar o resumo azul para atualizar os totais
+            // location.reload(); // Se quiser atualizar os cards do topo imediatamente
+        } else {
+            alert("Erro ao processar a baixa no servidor.");
+        }
+    })
+    .catch(error => console.error('Erro:', error));
+}
+
+function habilitarEdicao(id) {
+    // Esconde o texto e mostra o input
+    document.getElementById(`display-valor-${id}`).classList.add('d-none');
+    document.getElementById(`edit-container-${id}`).classList.remove('d-none');
+    
+    // Foca no input e seleciona o texto
+    const input = document.getElementById(`input-valor-${id}`);
+    input.focus();
+    input.select();
+}
+
+function salvarValor(id) {
+    const novoValor = document.getElementById(`input-valor-${id}`).value;
+
+    fetch(`/financas/atualizar-valor-real/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ valor: novoValor })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Recarrega a página para atualizar os cálculos da "Caixa Azul"
+            location.reload(); 
+        } else {
+            alert("Erro: " + data.message);
+        }
+    })
+    .catch(error => console.error('Erro:', error));
+}
+</script>
+{% endblock %}

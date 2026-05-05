@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Novo Gasto</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Descrição</label>
+                            <input type="text" name="descricao" class="form-control" placeholder="Ex: Conta de Luz" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Categoria</label>
+                                <select name="categoria_id" class="form-select" required>
+                                    <option value="">Selecione...</option>
+                                    {% for cat in categorias %}
+                                    <option value="{{ cat.CategoriaId }}">{{ cat.Nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Valor Estimado (R$)</label>
+                                <input type="text" name="valor_estimado" class="form-control" placeholder="0,00" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Data de Vencimento</label>
+                            <input type="date" name="data_vencimento" class="form-control" required>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary fw-bold">SALVAR LANÇAMENTO</button>
+                            <a href="{{ url_for('financas.dashboard') }}" class="btn btn-light">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

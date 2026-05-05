@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 from flask import render_template
 from routes.formacao import formacao_bp
 from config import Config
+from routes.financas import financas_bp
 
 load_dotenv()
 
@@ -46,6 +47,7 @@ app.register_blueprint(habilidades_bp)
 app.register_blueprint(certificacoes_bp)
 app.register_blueprint(experiencias_bp)
 app.register_blueprint(formacao_bp)
+app.register_blueprint(financas_bp)
 
 # CONFIGURAÇÃO DE E-MAIL (Exemplo Gmail)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
